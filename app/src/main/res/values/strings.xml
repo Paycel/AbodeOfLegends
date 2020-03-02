@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AdobeOfLegends</string>
+    <string name="load">Загрузка</string>
+    <string name="load_button">Загрузить</string>
+</resources>
