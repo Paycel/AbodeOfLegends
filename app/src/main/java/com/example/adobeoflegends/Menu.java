@@ -30,11 +30,12 @@ public class Menu extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.btn_NewGame:
-
+                        Intent newGame = new Intent(Menu.this, BattleActivity.class);
+                        startActivity(newGame);
                         break;
                     case R.id.btn_Load:
-                        Intent i = new Intent(Menu.this, Load.class);
-                        startActivity(i);
+                        Intent load = new Intent(Menu.this, Load.class);
+                        startActivity(load);
                         break;
                     case R.id.btn_Shop:
 

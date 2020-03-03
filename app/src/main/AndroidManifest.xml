@@ -23,6 +23,9 @@
         <activity
             android:name=".Load"
             />
+        <activity
+            android:name=".BattleActivity"
+        ></activity>
 
     </application>
 
