@@ -3,14 +3,15 @@ package com.example.adobeoflegends;
 public class Battle{
     Player player;
     Enemy enemy;
+    public static final int numsOfCards = 4;
 
     Battle(){
-        Card[] temp = new Card[3];
-        for (int i = 0; i < 3; i++)
+        Card[] temp = new Card[numsOfCards];
+        for (int i = 0; i < numsOfCards; i++)
             temp[i] = new Card();
         player = new Player(20, 30, temp);
-        Card[] temp1 = new Card[3];
-        for (int i = 0; i < 3; i++)
+        Card[] temp1 = new Card[numsOfCards];
+        for (int i = 0; i < numsOfCards; i++)
             temp1[i] = new Card();
         enemy = new Enemy(30, 20, temp1);
     }
