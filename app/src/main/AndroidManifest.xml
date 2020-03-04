@@ -20,8 +20,7 @@
             android:name=".Menu"
         ></activity>
 
-        <activity
-            android:name=".Load"
+        <activity android:name=".Load"
             />
         <activity
             android:name=".BattleActivity"

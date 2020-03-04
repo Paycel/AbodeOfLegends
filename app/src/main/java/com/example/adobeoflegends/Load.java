@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.adobeoflegends.R;
+
 public class Load extends Activity {
     /**
     public static final String APP_PREFERENCES = "mysetting";

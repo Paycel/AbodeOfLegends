@@ -18,9 +18,7 @@
         android:id="@+id/enemy_table"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_weight="1"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player_table"
@@ -40,18 +38,19 @@
             android:id="@+id/card4"
             android:layout_width="100dp"
             android:layout_height="0dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card3"
-            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"></LinearLayout>
 
         <LinearLayout
             android:id="@+id/card3"
             android:layout_width="100dp"
             android:layout_height="0dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card2"
@@ -61,11 +60,16 @@
             android:id="@+id/card2"
             android:layout_width="100dp"
             android:layout_height="0dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card1"
-            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/card1"
@@ -74,7 +78,13 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/card1view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
