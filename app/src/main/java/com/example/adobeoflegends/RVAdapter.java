@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
+    private int position;
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
         TextView tvStats;
@@ -28,8 +29,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.MyViewHolder> {
     }
 
     List<Card> cardList;
-    RVAdapter(List<Card> cardList){
+    RVAdapter(List<Card> cardList, int position){
         this.cardList = cardList;
+        this.position = position;
     }
 
     @Override

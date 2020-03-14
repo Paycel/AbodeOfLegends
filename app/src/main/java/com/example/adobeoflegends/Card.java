@@ -25,7 +25,10 @@ public class Card {
             case 1: this.pictureID = R.drawable.peasant; break;
             case 2: this.pictureID = R.drawable.vampire; break;
             case 3: this.pictureID = R.drawable.wizard; break;
-
         }
+    }
+
+    public int getPictureID() {
+        return pictureID;
     }
 }
