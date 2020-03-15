@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,11 +30,7 @@ import com.example.adobeoflegends.Battle;
 import com.example.adobeoflegends.R;
 import com.google.android.material.resources.TextAppearance;
 
-public class BattleActivity extends AppCompatActivity implements View.OnTouchListener{
-    int topY, leftX, rightX, bottomY;
-    int eX, eY;
-    int offset_x = 0, offset_y = 0;
-    boolean dropFlag = false, touchFlag = false;
+public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +39,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnTouchLis
         setContentView(R.layout.activity_battle);
         final Battle battle = new Battle();
         final ConstraintLayout playerDeckLayout = (ConstraintLayout) findViewById(R.id.player_deck);
-
 
         ViewTreeObserver observer = playerDeckLayout.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -57,19 +53,17 @@ public class BattleActivity extends AppCompatActivity implements View.OnTouchLis
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        LinearLayout.LayoutParams par = (LinearLayout.LayoutParams) v.getLayoutParams();
-        switch(v.getId())
-        {
-
-
-
-
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.card1:
+                Toast.makeText(this, "CARD 1 CLICKED", Toast.LENGTH_SHORT).show();
+                break;
         }
-        return true;
+        Toast.makeText(this, "??? CLICKED", Toast.LENGTH_SHORT).show();
+
     }
 
-    // отчаянная попытка создать вручную, но неудачно
+    // отчаянная попытка создать вручную, но неудачно, а иначе и никак
     void createCardsViews(ConstraintLayout playerDeck, Battle battle, int i){
         // width -> height
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -79,7 +73,12 @@ public class BattleActivity extends AppCompatActivity implements View.OnTouchLis
         CardView.LayoutParams cvParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
         cvParams.setMargins(0, 20, 0, 0);
         LinearLayout card = (LinearLayout) findViewById(R.id.card2);
-
+        switch (i){
+            case 0: card = (LinearLayout) findViewById(R.id.card1); break;
+            case 1: card = (LinearLayout) findViewById(R.id.card2); break;
+            case 2: card = (LinearLayout) findViewById(R.id.card3); break;
+            case 3: card = (LinearLayout) findViewById(R.id.card4); break;
+        }
 
         FrameLayout fl = new FrameLayout(card.getContext());
         fl.setLayoutParams(flParams);
@@ -87,18 +86,23 @@ public class BattleActivity extends AppCompatActivity implements View.OnTouchLis
         CardView cv = new CardView(fl.getContext());
         cv.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
         cv.setLayoutParams(cvParams);
+        cv.setOnClickListener(this);
 
         LinearLayout ll = new LinearLayout(cv.getContext());
         ll.setGravity(Gravity.CENTER);
-        ll.setClickable(true);
         ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
         ll.setPadding(5, 0, 0, 0);
+        ll.setClickable(true);
+        ll.setEnabled(true);
+        ll.setOnClickListener(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(lParams);
 
         ImageView image = new ImageView(ll.getContext());
-        image.setLayoutParams(new LinearLayout.LayoutParams(150, 250));
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(150, 250);
+        image.setLayoutParams(imageParams);
         image.setImageResource(battle.player.cardList.get(i).pictureID);
+        image.setScaleType(ImageView.ScaleType.FIT_START);
 
         TextView stats = new TextView(ll.getContext());
         stats.setLayoutParams(l_allWrap_Params);
@@ -119,7 +123,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnTouchLis
         ll.addView(image);
         ll.addView(stats);
         ll.addView(desc);
-
 
 //        rv1.setHasFixedSize(true);
 //        LinearLayoutManager llm = new LinearLayoutManager(card.getContext());
@@ -152,11 +155,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnTouchLis
 //            card.addView(lstats);
 //            card.addView(ldescription);
 //        }
-
     }
-
-
-
 
 
 }
