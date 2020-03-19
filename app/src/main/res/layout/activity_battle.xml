@@ -59,17 +59,27 @@
             android:layout_weight="0.3"
             android:text="@string/next_move" />
 
+        <Button
+            android:id="@+id/btn_OK"
+            android:layout_width="42dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btn_NO"
+            android:layout_width="42dp"
+            android:layout_height="match_parent" />
+
         <TextView
             android:id="@+id/playerStats"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="6" />
+            android:layout_weight="100" />
 
         <TextView
             android:id="@+id/enemyStats"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="6" />
+            android:layout_weight="100" />
 
     </LinearLayout>
 </LinearLayout>

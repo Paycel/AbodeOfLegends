@@ -3,4 +3,6 @@
     <string name="load">Загрузка</string>
     <string name="load_button">Загрузить</string>
     <string name="next_move">Конец хода</string>
+    <string name="OK">0x2713</string>
+    <string name="NO">0x2716</string>
 </resources>

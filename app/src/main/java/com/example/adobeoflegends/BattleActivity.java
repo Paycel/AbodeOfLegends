@@ -23,6 +23,11 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout enemyTable;
     LinearLayout playerTable;
     Button nextMove;
+    Button buttonOK;
+    Button buttonNO;
+    TextView playerSTATS;
+    TextView enemySTATS;
+    LinearLayout tappedCard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,17 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         playerTable = (LinearLayout) findViewById(R.id.player_table);
         enemyTable = (LinearLayout) findViewById(R.id.enemy_table);
         nextMove = (Button) findViewById(R.id.btn_move);
-        // ДОБАВИТЬ ОБЩИЙ СЛУШАТЕЛЬ НА КНОПКИ И НА ВСЁ-ВСЁ-ВСЁ
+        buttonOK = (Button) findViewById(R.id.btn_OK);
+        buttonNO = (Button) findViewById(R.id.btn_NO);
+        buttonOK.setClickable(false);
+        buttonNO.setClickable(false);
+        playerSTATS = (TextView) findViewById(R.id.playerStats);
+        enemySTATS = (TextView) findViewById(R.id.enemyStats);
+        buttonOK.setText(getEmojiByUnicode(0x2713));
+        buttonNO.setText(getEmojiByUnicode(0x2716));
+        buttonNO.setOnClickListener(this);
+        buttonOK.setOnClickListener(this);
+        nextMove.setOnClickListener(this);
         ViewTreeObserver observer = playerDeck.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -74,24 +89,59 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         return (LinearLayout) ((ViewGroup) frameLayout.getParent());
     }
 
+    boolean isButton(View v){
+        return v.getId() == buttonNO.getId() || v.getId() == buttonOK.getId() || v.getId() == nextMove.getId();
+    }
+
+    // updateCard - обновляет после боя
+
+    void enemyMove(){
+        int num = (int) (Math.random() * enemyDeck.getChildCount());
+        moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
+        // Toast с результатами хода: потери здоровья у *имя персонажа*
+        // добавить метод на боевку, с вложенным updateCard в конце
+    }
+
     @Override
     public void onClick(View v) {
 
-        // Здесь будет перенос View на стол
+        // Это слушатель на всё
         // Добавить выделение при нажатии, и когда нажата кнопка "ОК" (или галочка), перенести
         // Иначе при нажатии на крестик, отменить выделение
         // Эти кнопки должны появляться только при нажатии на View
 
         // TABLE - Linear (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
-        LinearLayout card = secondToFirst(v);
-        switch (getParentTable(card).getId()){
-            case R.id.player_deck:
-                moveOnTable(card, playerTable);
-                break;
+        // ОБВОДКА - сделать 2 background одинаковых, 1 с обводкой, другой чистый
+        // пока без обводки
+
+        LinearLayout card = null;
+        if (!isButton(v)) {
+            card = secondToFirst(v);
+            // клик и перенос карты
+            switch (getParentTable(card).getId()) {
+                case R.id.player_deck:
+                    buttonOK.setClickable(true);
+                    buttonNO.setClickable(true);
+                    tappedCard = card;
+                    break;
+            }
+        } else {
+            // кнопка OK и отмена
+            buttonOK.setClickable(false);
+            buttonNO.setClickable(false);
+            switch (v.getId()){
+                case R.id.btn_OK:
+                    moveOnTable(tappedCard, playerTable);
+                    break;
+                case R.id.btn_NO:
+                    break;
+                case R.id.btn_move:
+                    enemyMove();
+                    break;
+            }
         }
 
-
-        Toast.makeText(this, "ID: " + v.getId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "ID: " + v.getId(), Toast.LENGTH_SHORT).show();
     }
 
     // отрисовка карт
@@ -125,7 +175,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         hideCover(card);
         table.addView(card);
     }
-
+    // при первом запуске
     void setParams(LinearLayout card, LinearLayout table, int i) {
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams l_allWrap_Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -149,13 +199,19 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
         LinearLayout ll = new LinearLayout(cv.getContext());
         ll.setId(View.generateViewId());
+        if (table == playerDeck){
+            battle.player.cardList.get(i).viewID = ll.getId();
+        } else {
+            battle.enemy.cardList.get(i).viewID = ll.getId();
+        }
         ll.setGravity(Gravity.CENTER);
         ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
         ll.setPadding(5, 0, 0, 0);
         ll.setClickable(true);
         ll.setEnabled(true);
         // НАЖАТИЕ НА АКТИВНОСТЬ КАРТЫ
-        ll.setOnClickListener(this);
+        if (table == playerDeck)
+            ll.setOnClickListener(this);
         ll.setTag("TAG");
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(lParams);
@@ -164,7 +220,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         image.setId(View.generateViewId());
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(150, 250);
         image.setLayoutParams(imageParams);
-        if (table == (LinearLayout) findViewById(R.id.player_deck)) {
+        if (table == playerDeck) {
             image.setImageResource(battle.player.cardList.get(i).pictureID);
             image.setScaleType(ImageView.ScaleType.FIT_START);
         } else {

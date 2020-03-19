@@ -11,6 +11,7 @@ public class Card {
     int damagePoints;
     String name;
     int pictureID;
+    int viewID;
 
     Card(){
         int hp =  (int)(Math.random()*10 + 1);
