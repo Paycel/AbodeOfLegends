@@ -1,35 +1,20 @@
 package com.example.adobeoflegends;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.text.Layout;
-import android.text.style.StyleSpan;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.adobeoflegends.Battle;
-import com.example.adobeoflegends.R;
-import com.google.android.material.resources.TextAppearance;
 
 public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
     Battle battle;
@@ -37,6 +22,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout playerDeck;
     LinearLayout enemyTable;
     LinearLayout playerTable;
+    Button nextMove;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +33,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         playerDeck = (LinearLayout) findViewById(R.id.player_deck);
         playerTable = (LinearLayout) findViewById(R.id.player_table);
         enemyTable = (LinearLayout) findViewById(R.id.enemy_table);
+        nextMove = (Button) findViewById(R.id.btn_move);
+        // ДОБАВИТЬ ОБЩИЙ СЛУШАТЕЛЬ НА КНОПКИ И НА ВСЁ-ВСЁ-ВСЁ
         ViewTreeObserver observer = playerDeck.getViewTreeObserver();
         observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -60,6 +48,32 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+
+    void setCover(LinearLayout card){
+        FrameLayout frameLayout = (FrameLayout) card.getChildAt(0);
+        CardView cardView = (CardView) frameLayout.getChildAt(0);
+        LinearLayout linearLayout = (LinearLayout) cardView.getChildAt(0);
+        linearLayout.setForeground(getDrawable(R.drawable.cover_of_card));
+    }
+
+    void hideCover(LinearLayout card){
+        FrameLayout frameLayout = (FrameLayout) card.getChildAt(0);
+        CardView cardView = (CardView) frameLayout.getChildAt(0);
+        LinearLayout linearLayout = (LinearLayout) cardView.getChildAt(0);
+        linearLayout.setForeground(null);
+    }
+
+    LinearLayout getParentTable(LinearLayout card){
+        return (LinearLayout) ((ViewGroup) card.getParent());
+    }
+
+    LinearLayout secondToFirst(View v){
+        LinearLayout second = (LinearLayout) v;
+        CardView cardView = (CardView) ((ViewGroup) second.getParent());
+        FrameLayout frameLayout = (FrameLayout) ((ViewGroup) cardView.getParent());
+        return (LinearLayout) ((ViewGroup) frameLayout.getParent());
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -69,17 +83,50 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         // Эти кнопки должны появляться только при нажатии на View
 
         // TABLE - Linear (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
+        LinearLayout card = secondToFirst(v);
+        switch (getParentTable(card).getId()){
+            case R.id.player_deck:
+                moveOnTable(card, playerTable);
+                break;
+        }
 
-        LinearLayout second = (LinearLayout) v;
-        CardView cardView = (CardView) ((ViewGroup) second.getParent());
-        FrameLayout frameLayout = (FrameLayout) ((ViewGroup) cardView.getParent());
-        LinearLayout card = (LinearLayout) ((ViewGroup) frameLayout.getParent());
-        addOnTable(card, enemyTable);
 
         Toast.makeText(this, "ID: " + v.getId(), Toast.LENGTH_SHORT).show();
     }
 
-    void setParams(LinearLayout card, LinearLayout table, int i){
+    // отрисовка карт
+    void drawCard(LinearLayout card, LinearLayout table, boolean start) {
+        if (start) {
+            for (int i = 0; i < 4; i++) {
+                card = new LinearLayout(table.getContext());
+                setParams(card, table, i);
+                if (table == enemyDeck){
+                    setCover(card);
+                }
+                table.addView(card);
+            }
+        } else {
+            //addOnTable(card, table);
+            //скорее всего бесполезно, убирать start?
+        }
+    }
+
+    void deleteCard(LinearLayout card){
+        LinearLayout table = (LinearLayout) ((ViewGroup) card.getParent());
+        table.removeView(card);
+    }
+
+    void moveOnTable(LinearLayout card, LinearLayout table){
+        if (table.getChildCount() == 4){
+            Toast.makeText(this, "No space for card!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        deleteCard(card);
+        hideCover(card);
+        table.addView(card);
+    }
+
+    void setParams(LinearLayout card, LinearLayout table, int i) {
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams l_allWrap_Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         l_allWrap_Params.setMargins(0, 0, 0, 0);
@@ -90,7 +137,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         cvParams.setMargins(0, 20, 0, 0);
         card.setOrientation(LinearLayout.VERTICAL);
         card.setLayoutParams(cardParams);
-        //card.setOnClickListener(this);
 
         FrameLayout fl = new FrameLayout(card.getContext());
         fl.setLayoutParams(flParams);
@@ -121,8 +167,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         if (table == (LinearLayout) findViewById(R.id.player_deck)) {
             image.setImageResource(battle.player.cardList.get(i).pictureID);
             image.setScaleType(ImageView.ScaleType.FIT_START);
-        }
-        else {
+        } else {
             image.setImageResource(battle.enemy.cardList.get(i).pictureID);
             image.setScaleType(ImageView.ScaleType.FIT_END);
         }
@@ -132,17 +177,19 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         stats.setLayoutParams(l_allWrap_Params);
         stats.setGravity(Gravity.CENTER);
         stats.setTextAppearance(R.style.TextAppearance_AppCompat_Body1);
-        if (table == (LinearLayout) findViewById(R.id.player_deck))
-            stats.setText(battle.player.cardList.get(i).damagePoints + " " + battle.player.cardList.get(i).healthPoints);
+        int sword = 0x2694;
+        int heart = 0x2665;
+        if (table == playerDeck)
+            stats.setText(getEmojiByUnicode(sword) + " " + battle.player.cardList.get(i).damagePoints + " " + getEmojiByUnicode(heart) + " " + battle.player.cardList.get(i).healthPoints);
         else
-            stats.setText(battle.enemy.cardList.get(i).damagePoints + " " + battle.player.cardList.get(i).healthPoints);
+            stats.setText(getEmojiByUnicode(sword) + " " + battle.enemy.cardList.get(i).damagePoints + " " + getEmojiByUnicode(heart) + " " + battle.enemy.cardList.get(i).healthPoints);
         TextView desc = new TextView(ll.getContext());
         desc.setId(View.generateViewId());
-        l_allWrap_Params.setMargins(0, 15, 0, 8);
+        l_allWrap_Params.setMargins(0, 10, 0, 5);
         desc.setLayoutParams(l_allWrap_Params);
         desc.setGravity(Gravity.CENTER);
         desc.setTextAppearance(R.style.TextAppearance_AppCompat_Body2);
-        if (table == (LinearLayout) findViewById(R.id.player_deck))
+        if (table == playerDeck)
             desc.setText(battle.player.cardList.get(i).name);
         else
             desc.setText(battle.enemy.cardList.get(i).name);
@@ -157,29 +204,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         ll.addView(desc);
     }
 
-    // отрисовка карт
-    void drawCard(LinearLayout card, LinearLayout table, boolean start) {
-        if (start) {
-            for (int i = 0; i < 4; i++) {
-                card = new LinearLayout(table.getContext());
-                setParams(card, table, i);
-                table.addView(card);
-            }
-        } else {
-            //addOnTable(card, table);
-        }
+    String getEmojiByUnicode(int unicode){
+        return new String(Character.toChars(unicode));
     }
-
-    void deleteCard(LinearLayout card){
-        LinearLayout table = (LinearLayout) ((ViewGroup) card.getParent());
-        table.removeView(card);
-    }
-
-    void addOnTable(LinearLayout card, LinearLayout table){
-        deleteCard(card);
-        table.addView(card);
-    }
-
 
 }
 
@@ -210,7 +237,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     enemyMove:
         deleteCard
         drawCard
-
+    ...
 
  */
 
