@@ -12,6 +12,7 @@ public class Card {
     String name;
     int pictureID;
     int viewID;
+    boolean active;
 
     Card(){
         int hp =  (int)(Math.random()*10 + 1);
@@ -27,6 +28,7 @@ public class Card {
             case 2: this.pictureID = R.drawable.vampire; break;
             case 3: this.pictureID = R.drawable.wizard; break;
         }
+        active = false;
     }
 
     public int getPictureID() {

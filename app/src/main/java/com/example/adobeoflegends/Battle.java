@@ -19,19 +19,30 @@ public class Battle{
         enemy = new Enemy(30, 20, cardList);
     }
 
-    /*
-    void showInfo(){
-        System.out.printf("Player:\nHP = %d, MP = %d\n",player.healthPoints, player.manaPoints);
-        for (int i = 0; i < 3; i++)
-            System.out.printf("Card %d: HP = %d, DP = %d, Name = %s\n",
-                    i, player.cards[i].healthPoints, player.cards[i].damagePoints, player.cards[i].name);
-
-        System.out.printf("Enemy:\nHP = %d, MP = %d\n",enemy.healthPoints, enemy.manaPoints);
-        for (int i = 0; i < 3; i++)
-            System.out.printf("Card %d: HP = %d, DP = %d, Name = %s\n",
-                    i, enemy.cards[i].healthPoints, enemy.cards[i].damagePoints, enemy.cards[i].name);
+    int fight(Card player, Card enemy, int mode) {
+        if (mode == 1) {    // первый бьёт игрок
+            enemy.healthPoints -= player.damagePoints;
+            if (enemy.healthPoints <= 0)
+                return 0;               // победа игрока
+            else {
+                player.healthPoints -= enemy.damagePoints;
+                if (player.healthPoints <= 0){
+                    return 1;
+                }
+            }
+        } else {
+            player.healthPoints -= enemy.damagePoints;
+            if (player.healthPoints <= 0)
+                return 1;               // победа врага
+            else {
+                enemy.healthPoints -= player.damagePoints;
+                if (enemy.healthPoints <= 0){
+                    return 0;
+                }
+            }
+        }
+        return 2;
     }
-    */ // не открывать
 
 
 }
