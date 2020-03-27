@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,6 +41,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout playerCard;
     int moveCount;
     int helper;
+    int rndEnemy, rndPlayer;
     public static final String LOG_TAG = "Fight";
 
     @Override
@@ -144,6 +146,10 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         return new Card();
     }
 
+    boolean isEnd(){
+        return (enemyDeck.getChildCount() + enemyTable.getChildCount() == 0) || (playerTable.getChildCount() + playerDeck.getChildCount() == 0);
+    }
+
     void setTappedCard(LinearLayout card, boolean red){
         if (card == null) return;
         if (red)
@@ -158,6 +164,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void fight(LinearLayout cardPlayer, LinearLayout cardEnemy, int mode){
+        if (cardEnemy == null) return;
         int idPlayer = firstToSecond(cardPlayer).getId();
         int idEnemy = firstToSecond(cardEnemy).getId();
         int result = battle.fight(findCard(idPlayer), findCard(idEnemy), mode);
@@ -176,25 +183,21 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     void enemyMove() {
         // выкидывает карту на стол и бьёт случайного игрока
-
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-        final int num = (int) (Math.random() * enemyDeck.getChildCount());
-        firstToSecond((LinearLayout) enemyDeck.getChildAt(num)).setOnClickListener(this);
-        moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
-
+        int num = (int) (Math.random() * enemyDeck.getChildCount());
+        final boolean emptyDeck = enemyDeck.getChildCount() == 0;
+        if (!emptyDeck){
+            firstToSecond((LinearLayout) enemyDeck.getChildAt(num)).setOnClickListener(this);
+            moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
+        }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
                 if (playerTable.getChildCount() == 0) return;
-                final int rndEnemy = (int) (Math.random() * enemyTable.getChildCount());
-                final int rndPlayer = (int) (Math.random() * playerTable.getChildCount());
+                rndEnemy = (int) (Math.random() * enemyTable.getChildCount());
+                rndPlayer = (int) (Math.random() * playerTable.getChildCount());
                 setTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer), true);
                 setTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy), true);
+                /*
                 // ИЩЕМ NULL POINTER EXCEPTION
                 // для избежания надо всё делать в хендлере
                 if (playerTable.getChildAt(rndPlayer) == null || enemyTable.getChildAt(rndEnemy) == null){
@@ -202,14 +205,19 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                             rndPlayer + "\nenemyTable = " + enemyTable.getChildCount() + ", playerTable = " + playerTable.getChildCount());
                     int d = 0;
                 }
+                 */
+            }
+        });
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (playerTable.getChildCount() == 0) return;
                 fight((LinearLayout) playerTable.getChildAt(rndPlayer), (LinearLayout) enemyTable.getChildAt(rndEnemy), 2);
                 activateButton(buttonMOVE);
                 clearTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer));
                 clearTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy));
             }
-        });
-
-
+        }, 1500);
     }
 
     void playerMove(){
@@ -264,6 +272,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             // кнопка OK и отмена
             switch (v.getId()) {
                 case R.id.btn_OK:
+                    if (tappedCard == null) return;
                     moveOnTable(tappedCard, playerTable);
                     if (tappedCard != null) clearTappedCard(tappedCard);
                     deactivateButton(buttonOK);
@@ -280,7 +289,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     moveCount++;
                     enemyMove();
                     moveCount++;
+                    tappedCard = null;
                     activateButton(buttonOK);
+                    if (enemyCard != null) clearTappedCard(enemyCard);
                     break;
             }
         }
@@ -311,11 +322,13 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void deleteCard(LinearLayout card){
+        if (card == null) return;
         LinearLayout table = (LinearLayout) ((ViewGroup) card.getParent());
         table.removeView(card);
     }
 
     void moveOnTable(LinearLayout card, LinearLayout table){
+        if (card == null || table == null) return;
         if (table.getChildCount() == 4){
             Toast.makeText(this, "No space for card!", Toast.LENGTH_SHORT).show();
             return;
