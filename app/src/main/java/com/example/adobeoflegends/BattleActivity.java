@@ -183,31 +183,23 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     void enemyMove() {
         // выкидывает карту на стол и бьёт случайного игрока
-        int num = (int) (Math.random() * enemyDeck.getChildCount());
+        final int num = (int) (Math.random() * enemyDeck.getChildCount());
         final boolean emptyDeck = enemyDeck.getChildCount() == 0;
         if (!emptyDeck){
             firstToSecond((LinearLayout) enemyDeck.getChildAt(num)).setOnClickListener(this);
-            moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
-        }
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if (playerTable.getChildCount() == 0) return;
-                rndEnemy = (int) (Math.random() * enemyTable.getChildCount());
-                rndPlayer = (int) (Math.random() * playerTable.getChildCount());
-                setTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer), true);
-                setTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy), true);
-                /*
-                // ИЩЕМ NULL POINTER EXCEPTION
-                // для избежания надо всё делать в хендлере
-                if (playerTable.getChildAt(rndPlayer) == null || enemyTable.getChildAt(rndEnemy) == null){
-                    Log.d(LOG_TAG, "\nrndEnemy = " + rndEnemy + ", rndPlayer = " +
-                            rndPlayer + "\nenemyTable = " + enemyTable.getChildCount() + ", playerTable = " + playerTable.getChildCount());
-                    int d = 0;
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
+                    if (playerTable.getChildCount() == 0) return;
+                    rndEnemy = (int) (Math.random() * enemyTable.getChildCount());
+                    rndPlayer = (int) (Math.random() * playerTable.getChildCount());
+                    setTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer), true);
+                    setTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy), true);
                 }
-                 */
-            }
-        });
+            }, 1000);
+        }
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -217,28 +209,26 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                 clearTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer));
                 clearTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy));
             }
-        }, 1500);
+        }, 2000);
     }
 
-    void playerMove(){
+    void playerMove(final LinearLayout player, final LinearLayout enemy) {
         // бьёт выбранного игрока соперника
-        if (playerCard != null && enemyCard != null) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    fight(playerCard, enemyCard, 1);
-                }
-            });
-        }
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(LOG_TAG, "playerMove()\nPlayer Null = " + (player == null ? true : false) + "\nEnemy Null = " +  (enemy == null ? true : false));
+                if (player != null && enemy != null)
+                    fight(player, enemy, 1);
+            }
+        });
+
     }
 
     @Override
     public void onClick(View v) {
 
         // Это слушатель на всё
-        // Добавить выделение при нажатии, и когда нажата кнопка "ОК" (или галочка), перенести
-        // Иначе при нажатии на крестик, отменить выделение
-        // Эти кнопки должны появляться только при нажатии на View
 
         // TABLE - Linear (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
 
@@ -284,14 +274,19 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     break;
                 case R.id.btn_move:
                     if (moveCount % 2 == 0) {
-                       playerMove();
+                       Log.d(LOG_TAG, "MOVE COUNT % 2\nPlayer Null = " + (playerCard == null ? true : false) + "\nEnemy Null = " +  (enemyCard == null ? true : false));
+                       playerMove(playerCard, enemyCard);
                     }
                     moveCount++;
                     enemyMove();
                     moveCount++;
-                    tappedCard = null;
                     activateButton(buttonOK);
                     if (enemyCard != null) clearTappedCard(enemyCard);
+                    if (playerCard != null) clearTappedCard(playerCard);
+                    if (tappedCard != null) clearTappedCard(tappedCard);
+                    tappedCard = null;
+                    enemyCard = null;
+                    playerCard = null;
                     break;
             }
         }
