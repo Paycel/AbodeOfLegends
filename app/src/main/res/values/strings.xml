@@ -3,7 +3,16 @@
     <string name="load">Загрузка</string>
     <string name="load_button">Загрузить</string>
     <string name="next_move">Ход</string>
-    <string name="OK">0x2713</string>
-    <string name="NO">0x2716</string>
-    <string name="INFO">0x24D8</string>
+    <string name="end_title_lose">Вы проиграли!</string>
+    <string name="end_message_lose">Но не расстраивайтесь, у вас всё получится!</string>
+    <string name="end_title_win">Вы выиграли!</string>
+    <string name="end_message_win">Поздравляем с победой!</string>
+    <string name="again">Начать заново</string>
+    <string name="exit">Выход</string>
+    <string name="OK">2713</string>
+    <string name="NO">2716</string>
+    <string name="INFO">24D8</string>
+    <string name="sword">2694</string>
+    <string name="heart">2665</string>
+    <string name="no_space">Нет места для карт!</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.adobeoflegends;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +42,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout tappedCard;
     LinearLayout enemyCard;
     LinearLayout playerCard;
+    FragmentManager fragmentManager;
+    GameDialog dialog;
     int moveCount;
     int helper;
     int rndEnemy, rndPlayer;
@@ -49,6 +54,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_battle);
+        fragmentManager = getSupportFragmentManager();
         helper = 0;
         battle = new Battle();
         enemyDeck = (LinearLayout) findViewById(R.id.enemy_deck);
@@ -64,9 +70,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         activateButton(buttonMOVE);
         playerSTATS = (TextView) findViewById(R.id.playerStats);
         enemySTATS = (TextView) findViewById(R.id.enemyStats);
-        buttonOK.setText(getEmojiByUnicode(0x2713));
-        buttonNO.setText(getEmojiByUnicode(0x2716));
-        buttonINFO.setText(getEmojiByUnicode(0x24D8));
+        buttonOK.setText(getEmojiByUnicode(Integer.parseInt(getResources().getText(R.string.OK).toString(), 16)));
+        buttonNO.setText(getEmojiByUnicode(Integer.parseInt(getResources().getText(R.string.NO).toString(), 16)));
+        buttonINFO.setText(getEmojiByUnicode(Integer.parseInt(getResources().getText(R.string.INFO).toString(), 16)));
         buttonNO.setOnClickListener(this);
         buttonOK.setOnClickListener(this);
         buttonMOVE.setOnClickListener(this);
@@ -125,12 +131,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     void setCardStats(LinearLayout card){
         LinearLayout s_card = firstToSecond(card);
         TextView stats = (TextView) s_card.getChildAt(1);
-        int sword = 0x2694;
-        int heart = 0x2665;
-        if (getParentTable(card) == playerTable)
-            stats.setText(getEmojiByUnicode(sword) + " " + findCard(s_card.getId()).damagePoints + " " + getEmojiByUnicode(heart) + " " + findCard(s_card.getId()).healthPoints);
-        else
-            stats.setText(getEmojiByUnicode(sword) + " " + findCard(s_card.getId()).damagePoints + " " + getEmojiByUnicode(heart) + " " + findCard(s_card.getId()).healthPoints);
+        int sword = Integer.parseInt(getResources().getText(R.string.sword).toString(), 16);
+        int heart = Integer.parseInt(getResources().getText(R.string.heart).toString(), 16);
+        stats.setText(getEmojiByUnicode(sword) + " " + findCard(s_card.getId()).damagePoints + " " + getEmojiByUnicode(heart) + " " + findCard(s_card.getId()).healthPoints);
     }
 
     Card findCard(int id){
@@ -146,8 +149,16 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         return new Card();
     }
 
-    boolean isEnd(){
-        return (enemyDeck.getChildCount() + enemyTable.getChildCount() == 0) || (playerTable.getChildCount() + playerDeck.getChildCount() == 0);
+    int isEnd(){
+        if (playerTable.getChildCount() + playerDeck.getChildCount() == 0) return 1;
+        else if (enemyDeck.getChildCount() + enemyTable.getChildCount() == 0) return 2;
+        return 0;
+    }
+
+    void endLevel(int mode){
+        if (mode == 0) return;
+        dialog = new GameDialog(mode);
+        dialog.show(fragmentManager, "myDialog");
     }
 
     void setTappedCard(LinearLayout card, boolean red){
@@ -185,21 +196,20 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         // выкидывает карту на стол и бьёт случайного игрока
         final int num = (int) (Math.random() * enemyDeck.getChildCount());
         final boolean emptyDeck = enemyDeck.getChildCount() == 0;
-        if (!emptyDeck){
+        if (!emptyDeck) {
             firstToSecond((LinearLayout) enemyDeck.getChildAt(num)).setOnClickListener(this);
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
-                    if (playerTable.getChildCount() == 0) return;
-                    rndEnemy = (int) (Math.random() * enemyTable.getChildCount());
-                    rndPlayer = (int) (Math.random() * playerTable.getChildCount());
-                    setTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer), true);
-                    setTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy), true);
-                }
-            }, 1000);
+            moveOnTable((LinearLayout) enemyDeck.getChildAt(num), enemyTable);
         }
-
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (playerTable.getChildCount() == 0) return;
+                rndEnemy = (int) (Math.random() * enemyTable.getChildCount());
+                rndPlayer = (int) (Math.random() * playerTable.getChildCount());
+                setTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer), true);
+                setTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy), true);
+            }
+        }, 1000);
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -208,6 +218,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                 activateButton(buttonMOVE);
                 clearTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer));
                 clearTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy));
+                endLevel(isEnd());
             }
         }, 2000);
     }
@@ -220,19 +231,15 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                 Log.d(LOG_TAG, "playerMove()\nPlayer Null = " + (player == null ? true : false) + "\nEnemy Null = " +  (enemy == null ? true : false));
                 if (player != null && enemy != null)
                     fight(player, enemy, 1);
+                endLevel(isEnd());
             }
         });
-
     }
 
     @Override
     public void onClick(View v) {
-
         // Это слушатель на всё
-
         // TABLE - Linear (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
-
-
         LinearLayout card = null;
         if (!isButton(v)) {
             card = secondToFirst(v);
@@ -266,11 +273,15 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     moveOnTable(tappedCard, playerTable);
                     if (tappedCard != null) clearTappedCard(tappedCard);
                     deactivateButton(buttonOK);
+
                     break;
                 case R.id.btn_NO:
                     if (tappedCard != null) clearTappedCard(tappedCard);
                     if (playerCard != null) clearTappedCard(playerCard);
                     if (enemyCard != null) clearTappedCard(enemyCard);
+                    tappedCard = null;
+                    enemyCard = null;
+                    playerCard = null;
                     break;
                 case R.id.btn_move:
                     if (moveCount % 2 == 0) {
@@ -298,7 +309,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
           ...
          */
     }
-
     // отрисовка карт
     void drawCard(LinearLayout card, LinearLayout table, boolean start) {
         if (start) {
@@ -325,13 +335,14 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     void moveOnTable(LinearLayout card, LinearLayout table){
         if (card == null || table == null) return;
         if (table.getChildCount() == 4){
-            Toast.makeText(this, "No space for card!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getText(R.string.no_space).toString(), Toast.LENGTH_SHORT).show();
             return;
         }
         deleteCard(card);
         hideCover(card);
         table.addView(card);
     }
+
     // при первом запуске
     void setParams(LinearLayout card, LinearLayout table, int i) {
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -392,8 +403,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         stats.setLayoutParams(l_allWrap_Params);
         stats.setGravity(Gravity.CENTER);
         stats.setTextAppearance(R.style.TextAppearance_AppCompat_Body1);
-        int sword = 0x2694;
-        int heart = 0x2665;
+        int sword = Integer.parseInt(getResources().getText(R.string.sword).toString(), 16);
+        int heart = Integer.parseInt(getResources().getText(R.string.heart).toString(), 16);
         if (table == playerDeck)
             stats.setText(getEmojiByUnicode(sword) + " " + battle.player.cardList.get(i).damagePoints + " " + getEmojiByUnicode(heart) + " " + battle.player.cardList.get(i).healthPoints);
         else
