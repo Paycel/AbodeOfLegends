@@ -24,7 +24,7 @@ public class Card {
         this.name = names[num];
         switch (num){
             case 0: this.pictureID = R.drawable.dragon; break;
-            case 1: this.pictureID = R.drawable.peasant; break;
+            case 1: this.pictureID = R.drawable.kek; break;
             case 2: this.pictureID = R.drawable.vampire; break;
             case 3: this.pictureID = R.drawable.wizard; break;
         }
