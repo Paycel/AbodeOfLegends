@@ -15,4 +15,7 @@
     <string name="sword">2694</string>
     <string name="heart">2665</string>
     <string name="no_space">Нет места для карт!</string>
+    <string name="player">Игрок: </string>
+    <string name="hp">HP: </string>
+    <string name="cards">Карт: </string>
 </resources>

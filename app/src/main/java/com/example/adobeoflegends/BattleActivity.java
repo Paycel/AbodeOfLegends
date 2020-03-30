@@ -1,17 +1,22 @@
 package com.example.adobeoflegends;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.HashMap;
@@ -48,12 +54,60 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     int helper;
     int rndEnemy, rndPlayer;
     public static final String LOG_TAG = "Fight";
+    private boolean isImageScaled = false;
+    View.OnLongClickListener onLongClickListener;
+    private int currentApiVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
+        currentApiVersion = android.os.Build.VERSION.SDK_INT;
+        final int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        if(currentApiVersion >= Build.VERSION_CODES.KITKAT) {
+            getWindow().getDecorView().setSystemUiVisibility(flags);
+            final View decorView = getWindow().getDecorView();
+            decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+                @Override
+                public void onSystemUiVisibilityChange(int visibility) {
+                    if((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                        decorView.setSystemUiVisibility(flags);
+                    }
+                }
+            });
+        }
         setContentView(R.layout.activity_battle);
+        setElementsAndParams();
+        ViewTreeObserver observer = playerDeck.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                playerDeck.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                enemyDeck.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                findViewById(R.id.MAIN).getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                drawCard(null, enemyDeck, true);
+                drawCard(null, playerDeck, true);
+            }
+        });
+        onLongClickListener = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showCardInfo(v);
+                return true;
+            }
+        };
+    }
+
+    int dpToPx(int dp){
+        return (int) (2.6 * dp);
+    }
+
+    void setElementsAndParams(){
         fragmentManager = getSupportFragmentManager();
         helper = 0;
         battle = new Battle();
@@ -77,38 +131,99 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         buttonOK.setOnClickListener(this);
         buttonMOVE.setOnClickListener(this);
         moveCount = 0;
-        ViewTreeObserver observer = playerDeck.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                playerDeck.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                enemyDeck.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                drawCard(null, enemyDeck, true);
-                drawCard(null, playerDeck, true);
-            }
-        });
     }
 
+    @SuppressLint("NewApi")
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(currentApiVersion >= Build.VERSION_CODES.KITKAT && hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
+    }
+
+    // LINEAR
     void setCover(LinearLayout card){
         firstToSecond(card).setForeground(getDrawable(R.drawable.cover_of_card));
     }
 
+    // LINEAR
     void hideCover(LinearLayout card){
         firstToSecond(card).setForeground(null);
     }
 
+    // Long Listener
+    void showCardInfo(View v){
+        if (isImageScaled) return;
+        ConstraintLayout card = (ConstraintLayout) v;
+        ConstraintLayout copy = new ConstraintLayout(findViewById(R.id.MAIN).getContext());
+        Card myCard = findCard(card.getId());
+        copy.setBackgroundResource(myCard.pictureID);
+        // View HP && DP - начало
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dpToPx(65), dpToPx(55));
+        ImageView imageHP = new ImageView(copy.getContext());
+        imageHP.setId(View.generateViewId());
+        imageHP.setLayoutParams(imageParams);
+        if (getParentTable(secondToFirst(v)) == playerDeck) {
+            // пока на ХП будет Пушной , а не картинка - imageHP.setImageResource(battle.player.cardList.get(i).pictureID);
+            imageHP.setImageResource(R.drawable.cover_of_card);
+            imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } else {
+            imageHP.setImageResource(R.drawable.cover_of_card);
+            imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
+
+        ImageView imageDP = new ImageView(copy.getContext());
+        imageDP.setId(View.generateViewId());
+        imageDP.setLayoutParams(imageParams);
+        if (getParentTable(secondToFirst(v)) == playerDeck) {
+            // а тут на ДП будет kek, кто ещё
+            imageDP.setImageResource(R.drawable.kek);
+            imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } else {
+            imageDP.setImageResource(R.drawable.kek);
+            imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
+        copy.addView(imageHP);
+        copy.addView(imageDP);
+        // размеры и отступы
+        ConstraintSet set = new ConstraintSet();
+        set.clone(copy);
+        set.connect(imageHP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+        set.connect(imageHP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0);
+        set.connect(imageDP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+        set.connect(imageDP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
+        set.applyTo(copy);
+        // View HP && DP - конец
+        ((FrameLayout) findViewById(R.id.MAIN)).addView(copy);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(200), dpToPx(300));
+        params.setMargins(dpToPx(105), dpToPx(190), 0, 0);
+        copy.setLayoutParams(params);
+        copy.setVisibility(View.VISIBLE);
+        isImageScaled = true;
+        playerTable.setVisibility(View.INVISIBLE);
+        copy.setOnClickListener(this);
+    }
+
+    // LINEAR
     LinearLayout getParentTable(LinearLayout card){
         return (LinearLayout) ((ViewGroup) card.getParent());
     }
 
-    LinearLayout firstToSecond(LinearLayout first){
+    ConstraintLayout firstToSecond(LinearLayout first){
         FrameLayout frameLayout = (FrameLayout) first.getChildAt(0);
         CardView cardView = (CardView) frameLayout.getChildAt(0);
-        return (LinearLayout) cardView.getChildAt(0);
+        return (ConstraintLayout) cardView.getChildAt(0);
     }
 
     LinearLayout secondToFirst(View v){
-        LinearLayout second = (LinearLayout) v;
+        ConstraintLayout second = (ConstraintLayout) v;
         CardView cardView = (CardView) ((ViewGroup) second.getParent());
         FrameLayout frameLayout = (FrameLayout) ((ViewGroup) cardView.getParent());
         return (LinearLayout) ((ViewGroup) frameLayout.getParent());
@@ -129,7 +244,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void setCardStats(LinearLayout card){
-        LinearLayout s_card = firstToSecond(card);
+        ConstraintLayout s_card = firstToSecond(card);
         TextView stats = (TextView) s_card.getChildAt(1);
         int sword = Integer.parseInt(getResources().getText(R.string.sword).toString(), 16);
         int heart = Integer.parseInt(getResources().getText(R.string.heart).toString(), 16);
@@ -181,14 +296,14 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         int result = battle.fight(findCard(idPlayer), findCard(idEnemy), mode);
         if (result == 0){ // победа игрока
             deleteCard(cardEnemy);
-            setCardStats(cardPlayer);
+          //  setCardStats(cardPlayer);
         } else if (result == 1){ // победа врага
             deleteCard(cardPlayer);
-            setCardStats(cardEnemy);
+          //  setCardStats(cardEnemy);
         } else{ // оба живы
             // обновить карты
-            setCardStats(cardEnemy);
-            setCardStats(cardPlayer);
+           // setCardStats(cardEnemy);
+           // setCardStats(cardPlayer);
         }
     }
 
@@ -236,12 +351,19 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         });
     }
 
+
     @Override
     public void onClick(View v) {
-        // Это слушатель на всё
-        // TABLE - Linear (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
+        // Это слушатель на всё, можно было разделить, но у автора беды с башкой
+        // TABLE - Frame (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
         LinearLayout card = null;
         if (!isButton(v)) {
+            if ((FrameLayout) ((ViewGroup) v.getParent()) == (FrameLayout) findViewById(R.id.MAIN)){
+                ((FrameLayout) findViewById(R.id.MAIN)).removeView(v);
+                isImageScaled = false;
+                playerTable.setVisibility(View.VISIBLE);
+                return;
+            }
             card = secondToFirst(v);
             if (helper == 0){
                 activateButton(buttonOK);
@@ -345,7 +467,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     // при первом запуске
     void setParams(LinearLayout card, LinearLayout table, int i) {
-        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        ConstraintLayout.LayoutParams lParams = new ConstraintLayout.LayoutParams(table.getWidth() / 4 - 15, table.getHeight());
         LinearLayout.LayoutParams l_allWrap_Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         l_allWrap_Params.setMargins(0, 0, 0, 0);
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(table.getWidth() / 4 - 15, table.getHeight());
@@ -365,69 +487,72 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         cv.setLayoutParams(cvParams);
         cv.setId(View.generateViewId());
 
-        LinearLayout ll = new LinearLayout(cv.getContext());
+        ConstraintLayout ll = new ConstraintLayout(cv.getContext());
         ll.setId(View.generateViewId());
         if (table == playerDeck){
             battle.player.cardList.get(i).viewID = ll.getId();
         } else {
             battle.enemy.cardList.get(i).viewID = ll.getId();
         }
-
-        ll.setGravity(Gravity.CENTER);
-        ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        ll.setLayoutParams(lParams);
+        //ll.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        ll.setBackgroundResource(findCard(ll.getId()).pictureID);
         ll.setPadding(5, 0, 0, 0);
         ll.setClickable(true);
         ll.setEnabled(true);
 
         // НАЖАТИЕ НА АКТИВНОСТЬ КАРТЫ
-        if (table == playerDeck)
-           ll.setOnClickListener(this);
-
-        ll.setOrientation(LinearLayout.VERTICAL);
-        ll.setLayoutParams(lParams);
-
-        ImageView image = new ImageView(ll.getContext());
-        image.setId(View.generateViewId());
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(150, 250);
-        image.setLayoutParams(imageParams);
         if (table == playerDeck) {
-            image.setImageResource(battle.player.cardList.get(i).pictureID);
-            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        } else {
-            image.setImageResource(battle.enemy.cardList.get(i).pictureID);
-            image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            ll.setOnClickListener(this);
+            ll.setOnLongClickListener(onLongClickListener);
         }
 
-        TextView stats = new TextView(ll.getContext());
-        stats.setId(View.generateViewId());
-        stats.setLayoutParams(l_allWrap_Params);
-        stats.setGravity(Gravity.CENTER);
-        stats.setTextAppearance(R.style.TextAppearance_AppCompat_Body1);
-        int sword = Integer.parseInt(getResources().getText(R.string.sword).toString(), 16);
-        int heart = Integer.parseInt(getResources().getText(R.string.heart).toString(), 16);
-        if (table == playerDeck)
-            stats.setText(getEmojiByUnicode(sword) + " " + battle.player.cardList.get(i).damagePoints + " " + getEmojiByUnicode(heart) + " " + battle.player.cardList.get(i).healthPoints);
-        else
-            stats.setText(getEmojiByUnicode(sword) + " " + battle.enemy.cardList.get(i).damagePoints + " " + getEmojiByUnicode(heart) + " " + battle.enemy.cardList.get(i).healthPoints);
-        TextView desc = new TextView(ll.getContext());
-        desc.setId(View.generateViewId());
-        l_allWrap_Params.setMargins(0, 10, 0, 5);
-        desc.setLayoutParams(l_allWrap_Params);
-        desc.setGravity(Gravity.CENTER);
-        desc.setTextAppearance(R.style.TextAppearance_AppCompat_Body2);
-        if (table == playerDeck)
-            desc.setText(battle.player.cardList.get(i).name);
-        else
-            desc.setText(battle.enemy.cardList.get(i).name);
+
+        // View HP && DP - начало
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(50, 50);
+
+        ImageView imageHP = new ImageView(ll.getContext());
+        imageHP.setId(View.generateViewId());
+        imageHP.setLayoutParams(imageParams);
+        if (table == playerDeck) {
+            // пока на ХП будет Пушной , а не картинка - imageHP.setImageResource(battle.player.cardList.get(i).pictureID);
+            imageHP.setImageResource(R.drawable.cover_of_card);
+            imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } else {
+            imageHP.setImageResource(R.drawable.cover_of_card);
+            imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
+
+        ImageView imageDP = new ImageView(ll.getContext());
+        imageDP.setId(View.generateViewId());
+        imageDP.setLayoutParams(imageParams);
+        if (table == playerDeck) {
+            // а тут на ДП будет kek, кто ещё
+            imageDP.setImageResource(R.drawable.kek);
+            imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } else {
+            imageDP.setImageResource(R.drawable.kek);
+            imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
+        ll.addView(imageHP);
+        ll.addView(imageDP);
+        // размеры и отступы
+        ConstraintSet set = new ConstraintSet();
+        set.clone(ll);
+        set.connect(imageHP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+        set.connect(imageHP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0);
+        set.connect(imageDP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
+        set.connect(imageDP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
+        set.applyTo(ll);
+        // View HP && DP - конец
+
         card.setEnabled(true);
         card.setClickable(true);
         card.setId(table.getChildCount() + 1);
         card.addView(fl);
         fl.addView(cv);
         cv.addView(ll);
-        ll.addView(image);
-        ll.addView(stats);
-        ll.addView(desc);
+
     }
 
     String getEmojiByUnicode(int unicode){
