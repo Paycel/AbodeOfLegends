@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/MAIN"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/enemy_deck"
-        android:layout_width="410dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -18,8 +18,8 @@
     <LinearLayout
         android:id="@+id/enemy_table"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginTop="170dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
         android:clickable="false"
         android:gravity="center"
         android:orientation="horizontal" />
@@ -27,8 +27,8 @@
     <LinearLayout
         android:id="@+id/player_table"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginTop="340dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -37,8 +37,8 @@
     <LinearLayout
         android:id="@+id/player_deck"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:layout_marginTop="510dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -47,8 +47,8 @@
     <LinearLayout
         android:id="@+id/info"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="680dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3.6"
         android:orientation="horizontal">
 
         <Button
@@ -86,4 +86,4 @@
             android:layout_weight="100" />
 
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>

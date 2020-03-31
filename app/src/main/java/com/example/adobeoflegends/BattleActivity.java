@@ -1,22 +1,16 @@
 package com.example.adobeoflegends;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Dialog;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -30,15 +24,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.FragmentManager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
-    Battle battle;
+    public static Battle battle;
     LinearLayout enemyDeck;
-    LinearLayout playerDeck;
+    public static LinearLayout playerDeck;
     LinearLayout enemyTable;
     LinearLayout playerTable;
+    LinearLayout INFO;
+    public static LinearLayout MAIN;
     Button buttonMOVE;
     Button buttonOK;
     Button buttonNO;
@@ -49,12 +42,13 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout enemyCard;
     LinearLayout playerCard;
     FragmentManager fragmentManager;
-    GameDialog dialog;
+    EndGameDialog dialog_end;
+    ShowCardDialog dialog_show;
     int moveCount;
     int helper;
     int rndEnemy, rndPlayer;
-    public static final String LOG_TAG = "Fight";
-    private boolean isImageScaled = false;
+    public static final String LOG_TAG_FIGHT = "Fight";
+    public static final String LOG_TAG_SIZE = "Size";
     View.OnLongClickListener onLongClickListener;
     private int currentApiVersion;
 
@@ -103,18 +97,21 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         };
     }
 
-    int dpToPx(int dp){
-        return (int) (2.6 * dp);
+    void imagePress(View v, boolean isImagePressed, int duration){
+        if (!isImagePressed) v.animate().scaleX(0.7f).scaleY(0.7f).setDuration(duration);
+        if (isImagePressed) v.animate().scaleX(1f).scaleY(1f).setDuration(duration);
     }
 
     void setElementsAndParams(){
         fragmentManager = getSupportFragmentManager();
         helper = 0;
         battle = new Battle();
+        MAIN = (LinearLayout) findViewById(R.id.MAIN);
         enemyDeck = (LinearLayout) findViewById(R.id.enemy_deck);
         playerDeck = (LinearLayout) findViewById(R.id.player_deck);
         playerTable = (LinearLayout) findViewById(R.id.player_table);
         enemyTable = (LinearLayout) findViewById(R.id.enemy_table);
+        INFO = (LinearLayout) findViewById(R.id.info);
         buttonMOVE = (Button) findViewById(R.id.btn_move);
         buttonOK = (Button) findViewById(R.id.btn_OK);
         buttonNO = (Button) findViewById(R.id.btn_NO);
@@ -160,9 +157,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     // Long Listener
     void showCardInfo(View v){
-        if (isImageScaled) return;
+        /*
         ConstraintLayout card = (ConstraintLayout) v;
-        ConstraintLayout copy = new ConstraintLayout(findViewById(R.id.MAIN).getContext());
+        ConstraintLayout copy = new ConstraintLayout(MAIN.getContext());
         Card myCard = findCard(card.getId());
         copy.setBackgroundResource(myCard.pictureID);
         // View HP && DP - начало
@@ -201,18 +198,20 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         set.connect(imageDP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
         set.applyTo(copy);
         // View HP && DP - конец
-        ((FrameLayout) findViewById(R.id.MAIN)).addView(copy);
+        MAIN.addView(copy);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(200), dpToPx(300));
         params.setMargins(dpToPx(105), dpToPx(190), 0, 0);
         copy.setLayoutParams(params);
         copy.setVisibility(View.VISIBLE);
-        isImageScaled = true;
         playerTable.setVisibility(View.INVISIBLE);
-        copy.setOnClickListener(this);
+         */
+        dialog_show = new ShowCardDialog((ConstraintLayout) v);
+        dialog_show.show(fragmentManager, "ShowCard_Dialog");
+
     }
 
     // LINEAR
-    LinearLayout getParentTable(LinearLayout card){
+    public static LinearLayout getParentTable(LinearLayout card){
         return (LinearLayout) ((ViewGroup) card.getParent());
     }
 
@@ -222,7 +221,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         return (ConstraintLayout) cardView.getChildAt(0);
     }
 
-    LinearLayout secondToFirst(View v){
+    public static LinearLayout secondToFirst(View v){
         ConstraintLayout second = (ConstraintLayout) v;
         CardView cardView = (CardView) ((ViewGroup) second.getParent());
         FrameLayout frameLayout = (FrameLayout) ((ViewGroup) cardView.getParent());
@@ -251,7 +250,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         stats.setText(getEmojiByUnicode(sword) + " " + findCard(s_card.getId()).damagePoints + " " + getEmojiByUnicode(heart) + " " + findCard(s_card.getId()).healthPoints);
     }
 
-    Card findCard(int id){
+    public static Card findCard(int id){
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < Battle.numsOfCards; j++){
                 if (battle.player.cardList.get(j).viewID == id && i == 0){
@@ -272,8 +271,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     void endLevel(int mode){
         if (mode == 0) return;
-        dialog = new GameDialog(mode);
-        dialog.show(fragmentManager, "myDialog");
+        dialog_end = new EndGameDialog(mode);
+        dialog_end.show(fragmentManager, "End_Dialog");
     }
 
     void setTappedCard(LinearLayout card, boolean red){
@@ -330,7 +329,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             public void run() {
                 if (playerTable.getChildCount() == 0) return;
                 fight((LinearLayout) playerTable.getChildAt(rndPlayer), (LinearLayout) enemyTable.getChildAt(rndEnemy), 2);
-                activateButton(buttonMOVE);
                 clearTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer));
                 clearTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy));
                 endLevel(isEnd());
@@ -343,7 +341,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Log.d(LOG_TAG, "playerMove()\nPlayer Null = " + (player == null ? true : false) + "\nEnemy Null = " +  (enemy == null ? true : false));
                 if (player != null && enemy != null)
                     fight(player, enemy, 1);
                 endLevel(isEnd());
@@ -355,15 +352,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         // Это слушатель на всё, можно было разделить, но у автора беды с башкой
-        // TABLE - Frame (FIRST)  - Frame - CardView - Linear (SECOND)  - 3 View
+        // TABLE - Linear (FIRST)  - Frame - CardView - Linear (SECOND)  - 2 View
         LinearLayout card = null;
         if (!isButton(v)) {
-            if ((FrameLayout) ((ViewGroup) v.getParent()) == (FrameLayout) findViewById(R.id.MAIN)){
-                ((FrameLayout) findViewById(R.id.MAIN)).removeView(v);
-                isImageScaled = false;
-                playerTable.setVisibility(View.VISIBLE);
-                return;
-            }
             card = secondToFirst(v);
             if (helper == 0){
                 activateButton(buttonOK);
@@ -372,19 +363,19 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             }
             switch (getParentTable(card).getId()) {
                 case R.id.player_deck:
-                    if (tappedCard != null) clearTappedCard(tappedCard);
-                    setTappedCard(card, false);
+                    if (tappedCard != null) imagePress(tappedCard, true, 500);
                     tappedCard = card;
+                    imagePress(tappedCard, false, 500);
                     break;
                 case R.id.player_table:
-                    if (playerCard != null) clearTappedCard(playerCard);
-                    setTappedCard(card, false);
+                    if (playerCard != null) imagePress(playerCard, true, 500);
                     playerCard = card;
+                    imagePress(playerCard, false, 500);
                     break;
                 case R.id.enemy_table:
-                    if (enemyCard != null) clearTappedCard(enemyCard);
-                    setTappedCard(card, true);
+                    if (enemyCard != null) imagePress(enemyCard, true, 500);
                     enemyCard = card;
+                    imagePress(enemyCard, false, 500);
                     break;
             }
         } else {
@@ -393,43 +384,43 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                 case R.id.btn_OK:
                     if (tappedCard == null) return;
                     moveOnTable(tappedCard, playerTable);
-                    if (tappedCard != null) clearTappedCard(tappedCard);
+                    imagePress(tappedCard, true, 0);
                     deactivateButton(buttonOK);
-
                     break;
                 case R.id.btn_NO:
-                    if (tappedCard != null) clearTappedCard(tappedCard);
-                    if (playerCard != null) clearTappedCard(playerCard);
-                    if (enemyCard != null) clearTappedCard(enemyCard);
+                    if (tappedCard != null) imagePress(tappedCard, true, 0);
+                    if (playerCard != null) imagePress(playerCard, true, 0);
+                    if (enemyCard != null) imagePress(enemyCard, true, 0);
                     tappedCard = null;
                     enemyCard = null;
                     playerCard = null;
                     break;
                 case R.id.btn_move:
+                    deactivateButton(buttonMOVE);
+                    deactivateButton(buttonOK);
                     if (moveCount % 2 == 0) {
-                       Log.d(LOG_TAG, "MOVE COUNT % 2\nPlayer Null = " + (playerCard == null ? true : false) + "\nEnemy Null = " +  (enemyCard == null ? true : false));
+                       Log.d(LOG_TAG_FIGHT, "MOVE COUNT % 2\nPlayer Null = " + (playerCard == null ? true : false) + "\nEnemy Null = " +  (enemyCard == null ? true : false));
                        playerMove(playerCard, enemyCard);
                     }
                     moveCount++;
                     enemyMove();
                     moveCount++;
-                    activateButton(buttonOK);
-                    if (enemyCard != null) clearTappedCard(enemyCard);
-                    if (playerCard != null) clearTappedCard(playerCard);
-                    if (tappedCard != null) clearTappedCard(tappedCard);
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            activateButton(buttonMOVE);
+                            activateButton(buttonOK);
+                        }
+                    }, 3000);
+                    if (tappedCard != null) imagePress(tappedCard, true, 0);
+                    if (playerCard != null) imagePress(playerCard, true, 0);
+                    if (enemyCard != null) imagePress(enemyCard, true, 0);
                     tappedCard = null;
                     enemyCard = null;
                     playerCard = null;
                     break;
             }
         }
-        /*
-                БОЙ
-          0 ход - игрок кидает карты и нажимает ХОД (бить некого)
-          1 ход - соперник кидает карты и бьёт
-          2 ход - игрок кидает карты и бьёт
-          ...
-         */
     }
     // отрисовка карт
     void drawCard(LinearLayout card, LinearLayout table, boolean start) {
@@ -467,16 +458,21 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     // при первом запуске
     void setParams(LinearLayout card, LinearLayout table, int i) {
-        ConstraintLayout.LayoutParams lParams = new ConstraintLayout.LayoutParams(table.getWidth() / 4 - 15, table.getHeight());
+        ConstraintLayout.LayoutParams lParams = new ConstraintLayout.LayoutParams(table.getWidth() / 4 - 15, table.getHeight() - 5);
         LinearLayout.LayoutParams l_allWrap_Params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         l_allWrap_Params.setMargins(0, 0, 0, 0);
-        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(table.getWidth() / 4 - 15, table.getHeight());
-        cardParams.setMargins(5, 0, 5, 0);
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(table.getWidth() / 4 - 15, table.getHeight() - 5);
+        cardParams.setMargins(5,5,5,5);
         FrameLayout.LayoutParams flParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         CardView.LayoutParams cvParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
-        cvParams.setMargins(0, 20, 0, 0);
+        cvParams.setMargins(0, 0, 0, 0);
         card.setOrientation(LinearLayout.VERTICAL);
         card.setLayoutParams(cardParams);
+
+        int HEIGHT_MAIN = MAIN.getHeight();
+        int HEIGHT_TABLE = table.getHeight();
+        int HEIGHT_INFO = HEIGHT_MAIN - HEIGHT_TABLE * 4;
+        Log.d(LOG_TAG_SIZE, "HEIGHT_MAIN = " + HEIGHT_MAIN + "\nHEIGHT_TABLE = " + HEIGHT_TABLE + "\nHEIGHT_INFO = " + HEIGHT_INFO);
 
         FrameLayout fl = new FrameLayout(card.getContext());
         fl.setLayoutParams(flParams);

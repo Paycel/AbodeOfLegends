@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-public class GameDialog extends DialogFragment {
+public class EndGameDialog extends DialogFragment {
     /*
     mode - выбор режима:
     1 - окончание игры - поражение
@@ -18,7 +18,7 @@ public class GameDialog extends DialogFragment {
 
     int mode;
 
-    GameDialog(int mode){
+    EndGameDialog(int mode){
         this.mode = mode;
     }
 
@@ -40,8 +40,8 @@ public class GameDialog extends DialogFragment {
                 message = getResources().getText(R.string.end_message_win).toString();
                 break;
         }
-        builder.setTitle(title);  // заголовок
-        builder.setMessage(message); // сообщение
+        builder.setTitle(title);
+        builder.setMessage(message);
         // правая кнопка
         builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
