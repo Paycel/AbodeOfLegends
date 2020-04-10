@@ -71,18 +71,35 @@ public class ShowCardDialog extends DialogFragment {
             imageDP.setImageResource(R.drawable.kek);
             imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
         }
+        ImageView imageCOST = new ImageView(copy.getContext());
+        imageCOST.setId(View.generateViewId());
+        imageCOST.setLayoutParams(imageParams);
+        if (getParentTable(secondToFirst(card)) == playerDeck) {
+            imageCOST.setImageResource(R.drawable.dragon);
+            imageCOST.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        } else {
+            imageCOST.setImageResource(R.drawable.dragon);
+            imageCOST.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        }
         copy.addView(imageHP);
         copy.addView(imageDP);
+        copy.addView(imageCOST);
         ConstraintSet set = new ConstraintSet();
         set.clone(copy);
         set.connect(imageHP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
         set.connect(imageHP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0);
         set.connect(imageHP.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, height - imageHeight);
         set.connect(imageHP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, width - imageWidth);
+
         set.connect(imageDP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
         set.connect(imageDP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
         set.connect(imageDP.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, height - imageHeight);
         set.connect(imageDP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, width - imageWidth);
+
+        set.connect(imageCOST.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, height - imageHeight);
+        set.connect(imageCOST.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
+        set.connect(imageCOST.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0);
+        set.connect(imageCOST.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, width - imageWidth);
         set.applyTo(copy);
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(width, height);
         copy.setLayoutParams(params);

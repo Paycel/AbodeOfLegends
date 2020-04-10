@@ -1,8 +1,10 @@
 package com.example.adobeoflegends;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -45,13 +47,15 @@ public class EndGameDialog extends DialogFragment {
         // правая кнопка
         builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getActivity(), "1", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getActivity(), Menu.class);
+                startActivity(i);
             }
         });
         // левая кнопка
         builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getActivity(), "2", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getActivity(), BattleActivity.class);
+                startActivity(i);
             }
         });
         setCancelable(false);

@@ -13,10 +13,13 @@ public class Card {
     int pictureID;
     int viewID;
     boolean active;
+    boolean isTapped;
+    int cost;
 
     Card(){
         int hp =  (int)(Math.random()*10 + 1);
         int dp =  (int)(Math.random()*10 + 1);
+        int cost = (int)((Math.random()*10 + 1));
         int num = (int) (Math.random()*Battle.numsOfCards);
         String names[] = {
                 "Дракон",
@@ -26,6 +29,7 @@ public class Card {
         this.healthPoints = hp;
         this.damagePoints = dp;
         this.name = names[num];
+        this.cost = cost;
         switch (num){
             case 0: this.pictureID = R.drawable.dragon; break;
             case 1: this.pictureID = R.drawable.peasant; break;
@@ -33,6 +37,7 @@ public class Card {
             case 3: this.pictureID = R.drawable.wizard; break;
         }
         active = false;
+        isTapped = false;
     }
 
     public int getPictureID() {
