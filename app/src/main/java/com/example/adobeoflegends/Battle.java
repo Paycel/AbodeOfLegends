@@ -6,7 +6,7 @@ import java.util.List;
 public class Battle{
     Player player;
     Enemy enemy;
-    public static final int numsOfCards = 4;
+    public static final int numsOfCards = 7;
 
     Battle(){
         List<Card> cardList = new ArrayList<>();

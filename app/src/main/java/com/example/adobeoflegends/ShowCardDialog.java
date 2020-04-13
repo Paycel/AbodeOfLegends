@@ -54,47 +54,63 @@ public class ShowCardDialog extends DialogFragment {
         ImageView imageHP = new ImageView(copy.getContext());
         imageHP.setId(View.generateViewId());
         imageHP.setLayoutParams(imageParams);
-        if (getParentTable(secondToFirst(card)) == playerDeck) {
-            imageHP.setImageResource(R.drawable.cover_of_card);
-            imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        } else {
-            imageHP.setImageResource(R.drawable.cover_of_card);
-            imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        switch (myCard.healthPoints){
+            case 1: imageHP.setImageResource(R.drawable.one); break;
+            case 2: imageHP.setImageResource(R.drawable.two); break;
+            case 3: imageHP.setImageResource(R.drawable.three); break;
+            case 4: imageHP.setImageResource(R.drawable.four); break;
+            case 5: imageHP.setImageResource(R.drawable.five); break;
+            case 6: imageHP.setImageResource(R.drawable.six); break;
+            case 7: imageHP.setImageResource(R.drawable.seven); break;
+            case 8: imageHP.setImageResource(R.drawable.eight); break;
+            case 9: imageHP.setImageResource(R.drawable.nine); break;
+            case 10: imageHP.setImageResource(R.drawable.ten); break;
         }
         ImageView imageDP = new ImageView(copy.getContext());
         imageDP.setId(View.generateViewId());
         imageDP.setLayoutParams(imageParams);
-        if (getParentTable(secondToFirst(card)) == playerDeck) {
-            imageDP.setImageResource(R.drawable.kek);
-            imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        } else {
-            imageDP.setImageResource(R.drawable.kek);
-            imageDP.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        switch (myCard.damagePoints){
+            case 1: imageDP.setImageResource(R.drawable.one); break;
+            case 2: imageDP.setImageResource(R.drawable.two); break;
+            case 3: imageDP.setImageResource(R.drawable.three); break;
+            case 4: imageDP.setImageResource(R.drawable.four); break;
+            case 5: imageDP.setImageResource(R.drawable.five); break;
+            case 6: imageDP.setImageResource(R.drawable.six); break;
+            case 7: imageDP.setImageResource(R.drawable.seven); break;
+            case 8: imageDP.setImageResource(R.drawable.eight); break;
+            case 9: imageDP.setImageResource(R.drawable.nine); break;
+            case 10: imageDP.setImageResource(R.drawable.ten); break;
         }
         ImageView imageCOST = new ImageView(copy.getContext());
         imageCOST.setId(View.generateViewId());
         imageCOST.setLayoutParams(imageParams);
-        if (getParentTable(secondToFirst(card)) == playerDeck) {
-            imageCOST.setImageResource(R.drawable.dragon);
-            imageCOST.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        } else {
-            imageCOST.setImageResource(R.drawable.dragon);
-            imageCOST.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        switch (myCard.cost){
+            case 1: imageCOST.setImageResource(R.drawable.one); break;
+            case 2: imageCOST.setImageResource(R.drawable.two); break;
+            case 3: imageCOST.setImageResource(R.drawable.three); break;
+            case 4: imageCOST.setImageResource(R.drawable.four); break;
+            case 5: imageCOST.setImageResource(R.drawable.five); break;
+            case 6: imageCOST.setImageResource(R.drawable.six); break;
+            case 7: imageCOST.setImageResource(R.drawable.seven); break;
+            case 8: imageCOST.setImageResource(R.drawable.eight); break;
+            case 9: imageCOST.setImageResource(R.drawable.nine); break;
+            case 10: imageCOST.setImageResource(R.drawable.ten); break;
         }
-        copy.addView(imageHP);
         copy.addView(imageDP);
+        copy.addView(imageHP);
         copy.addView(imageCOST);
         ConstraintSet set = new ConstraintSet();
         set.clone(copy);
         set.connect(imageHP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-        set.connect(imageHP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0);
+        set.connect(imageHP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, width - imageWidth);
         set.connect(imageHP.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, height - imageHeight);
-        set.connect(imageHP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, width - imageWidth);
+        set.connect(imageHP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
 
         set.connect(imageDP.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0);
-        set.connect(imageDP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);
+        set.connect(imageDP.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, width - imageWidth);
         set.connect(imageDP.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, height - imageHeight);
-        set.connect(imageDP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, width - imageWidth);
+        set.connect(imageDP.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0);
 
         set.connect(imageCOST.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, height - imageHeight);
         set.connect(imageCOST.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0);

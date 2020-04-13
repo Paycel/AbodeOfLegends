@@ -20,12 +20,12 @@ public class Card {
         int hp =  (int)(Math.random()*10 + 1);
         int dp =  (int)(Math.random()*10 + 1);
         int cost = (int)((Math.random()*10 + 1));
-        int num = (int) (Math.random()*Battle.numsOfCards);
         String names[] = {
                 "Дракон",
                 "Крестьянин",
                 "Вампир",
                 "Волшебник"};
+        int num = (int) (Math.random()*names.length);
         this.healthPoints = hp;
         this.damagePoints = dp;
         this.name = names[num];

@@ -19,5 +19,11 @@
     <string name="enemy">Соперник: </string>
     <string name="hp">HP: </string>
     <string name="mp">MP: </string>
-    <string name="cards">Карт: </string>
+    <string name="cards">Карт в колоде: </string>
+    <string name="choose_card">Вы должны выбрать карту для удара!</string>
+    <string name="exit_dialog_title">Выход в главное меню</string>
+    <string name="exit_dialog_message">Вы действительно хотите выйти? Прогресс будет утерян!</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="no_cards">Закончились карты!</string>
 </resources>
