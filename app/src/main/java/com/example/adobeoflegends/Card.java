@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Card {
-    int healthPoints;
-    int damagePoints;
+    public int healthPoints;
+    public int damagePoints;
     String name;
-    int pictureID;
-    int viewID;
-    boolean active;
-    boolean isTapped;
-    int cost;
+    public int pictureID;
+    public int viewID;
+    public boolean active;
+    public boolean isTapped;
+    public int cost;
 
-    Card(){
+    public Card(){
         int hp =  (int)(Math.random()*10 + 1);
         int dp =  (int)(Math.random()*10 + 1);
         int cost = (int)((Math.random()*10 + 1));

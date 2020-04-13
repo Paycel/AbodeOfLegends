@@ -1,6 +1,5 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -24,6 +23,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.adobeoflegends.Battle;
+import com.example.adobeoflegends.Card;
+import com.example.adobeoflegends.R;
+import com.example.adobeoflegends.dialogs.EndGameDialog;
+import com.example.adobeoflegends.dialogs.ExitDialog;
+import com.example.adobeoflegends.dialogs.Info;
+import com.example.adobeoflegends.dialogs.ShowCardDialog;
+
+import java.util.ArrayList;
+
 public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
     public static Battle battle;
     LinearLayout enemyDeck;
@@ -41,7 +50,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout tappedCard;
     LinearLayout enemyCard;
     LinearLayout playerCard;
-    FragmentManager fragmentManager;
+    public static FragmentManager fragmentManager;
     EndGameDialog dialog_end;
     ShowCardDialog dialog_show;
     int moveCount;
@@ -53,6 +62,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     public static final String LOG_TAG_DELAY = "Delay";
     View.OnLongClickListener onLongClickListener;
     private int currentApi;
+    public static ArrayList<String> log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +118,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     void setElementsAndParams(){
         fragmentManager = getSupportFragmentManager();
+        log = new ArrayList<>();
         helper = 0;
         battle = new Battle();
         player_add = 4;
@@ -133,6 +144,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         buttonFACE.setOnClickListener(this);
         buttonOK.setOnClickListener(this);
         buttonMOVE.setOnClickListener(this);
+        buttonINFO.setOnClickListener(this);
         moveCount = 0;
     }
 
@@ -237,7 +249,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
         // never reached
-        return new Card();
+        return null;
     }
 
     int isEnd(){
@@ -498,6 +510,10 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         enemyCard = null;
                         endLevel(isEnd());
                     }
+                    break;
+                case R.id.btn_INFO:
+                    Info info = new Info();
+                    info.show(fragmentManager, "info_dialog");
                     break;
                 case R.id.btn_move:
                     for (int i = 0; i < playerTable.getChildCount(); i++)

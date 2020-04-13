@@ -1,4 +1,4 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +9,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.adobeoflegends.activity.Menu;
+import com.example.adobeoflegends.R;
 
 public class ExitDialog extends DialogFragment {
     @NonNull

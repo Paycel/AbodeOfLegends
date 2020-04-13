@@ -1,4 +1,4 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.activity;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -26,4 +26,8 @@
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="no_cards">Закончились карты!</string>
+    <string name="info_message">Что бы вы хотели узнать?</string>
+    <string name="journal">Журнал боя</string>
+    <string name="how_to_play">Как играть?</string>
+    <string name="close">Закрыть</string>
 </resources>

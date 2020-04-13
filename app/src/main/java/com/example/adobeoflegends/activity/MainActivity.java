@@ -1,9 +1,11 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.adobeoflegends.R;
 
 public class MainActivity extends Activity {
 

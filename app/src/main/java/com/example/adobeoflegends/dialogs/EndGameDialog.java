@@ -1,15 +1,17 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.adobeoflegends.activity.BattleActivity;
+import com.example.adobeoflegends.activity.Menu;
+import com.example.adobeoflegends.R;
 
 public class EndGameDialog extends DialogFragment {
     /*
@@ -20,7 +22,7 @@ public class EndGameDialog extends DialogFragment {
 
     int mode;
 
-    EndGameDialog(int mode){
+    public EndGameDialog(int mode){
         this.mode = mode;
     }
 

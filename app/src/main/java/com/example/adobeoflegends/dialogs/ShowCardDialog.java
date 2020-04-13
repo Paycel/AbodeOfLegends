@@ -1,20 +1,9 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.dialogs;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -24,18 +13,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.DialogFragment;
 
-import static com.example.adobeoflegends.BattleActivity.MAIN;
-import static com.example.adobeoflegends.BattleActivity.findCard;
-import static com.example.adobeoflegends.BattleActivity.getParentTable;
-import static com.example.adobeoflegends.BattleActivity.playerDeck;
-import static com.example.adobeoflegends.BattleActivity.secondToFirst;
+import com.example.adobeoflegends.Card;
+import com.example.adobeoflegends.R;
+
+import static com.example.adobeoflegends.activity.BattleActivity.findCard;
 
 
 public class ShowCardDialog extends DialogFragment {
 
     ConstraintLayout card;
 
-    ShowCardDialog(ConstraintLayout card){
+    public ShowCardDialog(ConstraintLayout card){
         this.card = card;
     }
 
