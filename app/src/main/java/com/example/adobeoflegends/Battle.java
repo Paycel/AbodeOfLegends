@@ -14,7 +14,7 @@ public class Battle{
         List<Card> cardList = new ArrayList<>();
         for (int i = 0; i < numsOfCards; i++)
             cardList.add(new Card());
-        player = new Player(20, 30, cardList);
+        player = new Player(20, 20, cardList);
         cardList = new ArrayList<>();
         for (int i = 0; i < numsOfCards; i++)
             cardList.add(new Card());

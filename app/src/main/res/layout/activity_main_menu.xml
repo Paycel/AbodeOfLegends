@@ -23,24 +23,31 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_NewGame"
+            android:id="@+id/btn_RandomGame"
             android:layout_width="260dp"
             android:layout_height="48dp"
-            android:text="New Game"
+            android:text="@string/randomly"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_ChooseLevel"
+            android:layout_width="260dp"
+            android:layout_height="48dp"
+            android:text="@string/choose_level"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_Load"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:text="Load"
+            android:text="@string/load_button"
             android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_Shop"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:text="Shop"
+            android:text="@string/shop"
             android:textAllCaps="false" />
 
     </LinearLayout>

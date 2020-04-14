@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">AdobeOfLegends</string>
     <string name="load">Загрузка</string>
+    <string name="randomly">Случайный уровень</string>
+    <string name="choose_level">Выбрать уровень</string>
     <string name="load_button">Загрузить</string>
+    <string name="shop">Магизин</string>
     <string name="next_move">Ход</string>
     <string name="end_title_lose">Вы проиграли!</string>
     <string name="end_message_lose">Не сегодня!</string>
@@ -30,4 +33,22 @@
     <string name="journal">Журнал боя</string>
     <string name="how_to_play">Как играть?</string>
     <string name="close">Закрыть</string>
+    <string name="choose">Выберите уровень</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="ten">10</string>
+    <string name="eleven">11</string>
+    <string name="twelve">12</string>
+    <string name="thirteen">13</string>
+    <string name="fourteen">14</string>
+    <string name="fifteen">15</string>
+    <string name="back">Назад</string>
+
 </resources>

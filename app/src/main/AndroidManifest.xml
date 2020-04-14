@@ -25,6 +25,7 @@
         <activity
             android:name=".activity.BattleActivity"
         ></activity>
+        <activity android:name=".activity.Choose_Level"></activity>
 
     </application>
 

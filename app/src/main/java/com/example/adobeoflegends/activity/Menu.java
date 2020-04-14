@@ -16,15 +16,16 @@ public class Menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main_menu);
-        Button buttonNewGame = (Button) findViewById(R.id.btn_NewGame);
+        Button buttonRandomGame = (Button) findViewById(R.id.btn_RandomGame);
         Button buttonLoad = (Button) findViewById(R.id.btn_Load);
         Button buttonShop = (Button) findViewById(R.id.btn_Shop);
+        Button buttonChooseGame = (Button) findViewById(R.id.btn_ChooseLevel);
 
         View.OnClickListener listener = new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
-                    case R.id.btn_NewGame:
+                    case R.id.btn_RandomGame:
                         Intent newGame = new Intent(Menu.this, BattleActivity.class);
                         startActivity(newGame);
                         break;
@@ -35,13 +36,18 @@ public class Menu extends AppCompatActivity {
                     case R.id.btn_Shop:
 
                         break;
+                    case R.id.btn_ChooseLevel:
+                        Intent i = new Intent(Menu.this, Choose_Level.class);
+                        startActivity(i);
+                        break;
                 }
             }
         };
 
         buttonLoad.setOnClickListener(listener);
-        buttonNewGame.setOnClickListener(listener);
+        buttonRandomGame.setOnClickListener(listener);
         buttonShop.setOnClickListener(listener);
+        buttonChooseGame.setOnClickListener(listener);
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 public class Card {
     public int healthPoints;
     public int damagePoints;
-    String name;
+    public String name;
     public int pictureID;
     public int viewID;
     public boolean active;
