@@ -8,14 +8,4 @@
     android:background="#8E5A5A"
     android:gravity="bottom"
 
-    android:orientation="horizontal">
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="99dp"
-        android:layout_height="96dp"
-        android:background="@drawable/round_button"
-        android:text="Button"
-        tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="86dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:orientation="horizontal"/>

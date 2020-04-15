@@ -8,7 +8,7 @@ import java.util.List;
 public class Battle{
     public Player player;
     public Enemy enemy;
-    public static final int numsOfCards = 7;
+    public static int numsOfCards;
 
     public Battle(){
         List<Card> cardList = new ArrayList<>();
@@ -18,7 +18,7 @@ public class Battle{
         cardList = new ArrayList<>();
         for (int i = 0; i < numsOfCards; i++)
             cardList.add(new Card());
-        enemy = new Enemy(30, 20, cardList);
+        enemy = new Enemy(30, 30, cardList);
     }
 
     public int fight(Card player, Card enemy, int mode) {

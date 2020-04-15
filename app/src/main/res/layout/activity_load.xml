@@ -46,16 +46,5 @@
         android:layout_height="match_parent"
         android:layout_weight="4"
         android:gravity="center"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_Load"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/load_button"
-            android:textSize="30sp"
-            tools:layout_editor_absoluteX="144dp"
-            tools:layout_editor_absoluteY="41dp" />
-    </LinearLayout>
+        android:orientation="vertical"/>
 </LinearLayout>

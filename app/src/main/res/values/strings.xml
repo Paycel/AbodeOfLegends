@@ -3,13 +3,15 @@
     <string name="load">Загрузка</string>
     <string name="randomly">Случайный уровень</string>
     <string name="choose_level">Выбрать уровень</string>
-    <string name="load_button">Загрузить</string>
-    <string name="shop">Магизин</string>
+    <string name="load_results">Ваши успехи</string>
+    <string name="shop">Магазин</string>
     <string name="next_move">Ход</string>
     <string name="end_title_lose">Вы проиграли!</string>
     <string name="end_message_lose">Не сегодня!</string>
     <string name="end_title_win">Вы выиграли!</string>
-    <string name="end_message_win">Поздравляем с победой!</string>
+    <string name="end_message_win">Поздравляем с победой! Перейти на следующий уровень?</string>
+    <string name="next_level">Перейти</string>
+    <string name="last_level">Поздравляем! Это был последний уровень!</string>
     <string name="again">Начать заново</string>
     <string name="exit">Выход</string>
     <string name="OK">2713</string>
@@ -22,7 +24,7 @@
     <string name="enemy">Соперник: </string>
     <string name="hp">HP: </string>
     <string name="mp">MP: </string>
-    <string name="cards">Карт в колоде: </string>
+    <string name="cards">Карт: </string>
     <string name="choose_card">Вы должны выбрать карту для удара!</string>
     <string name="exit_dialog_title">Выход в главное меню</string>
     <string name="exit_dialog_message">Вы действительно хотите выйти? Прогресс будет утерян!</string>

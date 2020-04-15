@@ -3,6 +3,7 @@
     android:id="@+id/MAIN"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme"
     android:orientation="vertical">
 
     <LinearLayout
@@ -56,39 +57,51 @@
             android:id="@+id/btn_move"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="3dp"
             android:layout_weight="0.9"
+            android:background="@drawable/round_button_gameplay"
             android:text="@string/next_move" />
 
         <Button
             android:id="@+id/btn_OK"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.99" />
+            android:layout_margin="1dp"
+            android:layout_weight="0.99"
+            android:background="@drawable/round_button_gameplay" />
 
         <Button
             android:id="@+id/btn_ToFace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.99" />
+            android:layout_margin="1dp"
+            android:layout_weight="0.99"
+            android:background="@drawable/round_button_gameplay" />
 
         <Button
             android:id="@+id/btn_INFO"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.99" />
+            android:layout_margin="1dp"
+            android:layout_weight="0.99"
+            android:background="@drawable/round_button_gameplay" />
 
         <TextView
             android:id="@+id/playerStats"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="1dp"
             android:layout_weight="0.8"
+            android:background="@drawable/round_textview"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <TextView
             android:id="@+id/enemyStats"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
+            android:layout_margin="1dp"
+            android:layout_weight="0.85"
+            android:background="@drawable/round_textview"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     </LinearLayout>

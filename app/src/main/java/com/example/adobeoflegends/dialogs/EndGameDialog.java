@@ -33,33 +33,60 @@ public class EndGameDialog extends DialogFragment {
         String message = "";
         String btnAgain = getResources().getText(R.string.again).toString();
         String btnExit = getResources().getText(R.string.exit).toString();
+        String btnYes = getResources().getText(R.string.yes).toString();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         switch (mode){
             case 1:
                 title = getResources().getText(R.string.end_title_lose).toString();
                 message = getResources().getText(R.string.end_message_lose).toString();
+                // правая кнопка
+                builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getActivity(), Menu.class);
+                        startActivity(i);
+                    }
+                });
+                // левая кнопка
+                builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getActivity(), BattleActivity.class);
+                        startActivity(i);
+                    }
+                });
                 break;
             case 2:
                 title = getResources().getText(R.string.end_title_win).toString();
-                message = getResources().getText(R.string.end_message_win).toString();
+                if (BattleActivity.difficulty == 12)
+                    message = getResources().getText(R.string.last_level).toString();
+                else message = getResources().getText(R.string.end_message_win).toString();
+                // правая кнопка
+                builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getActivity(), Menu.class);
+                        startActivity(i);
+                    }
+                });
+                // левая кнопка
+                builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getActivity(), BattleActivity.class);
+                        startActivity(i);
+                    }
+                });
+                if (BattleActivity.difficulty != 12) {
+                    builder.setNeutralButton(btnYes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent i = new Intent(getActivity(), BattleActivity.class);
+                            i.putExtra("difficulty", BattleActivity.difficulty + 1);
+                            startActivity(i);
+                        }
+                    });
+                }
                 break;
         }
         builder.setTitle(title);
         builder.setMessage(message);
-        // правая кнопка
-        builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Intent i = new Intent(getActivity(), Menu.class);
-                startActivity(i);
-            }
-        });
-        // левая кнопка
-        builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Intent i = new Intent(getActivity(), BattleActivity.class);
-                startActivity(i);
-            }
-        });
         setCancelable(false);
         return builder.create();
     }

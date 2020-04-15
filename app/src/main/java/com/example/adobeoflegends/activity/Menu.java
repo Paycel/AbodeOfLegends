@@ -27,6 +27,7 @@ public class Menu extends AppCompatActivity {
                 switch (v.getId()){
                     case R.id.btn_RandomGame:
                         Intent newGame = new Intent(Menu.this, BattleActivity.class);
+                        newGame.putExtra("difficulty", 0);
                         startActivity(newGame);
                         break;
                     case R.id.btn_Load:
