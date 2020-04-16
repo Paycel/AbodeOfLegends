@@ -31,6 +31,14 @@ public class Choose_Level extends AppCompatActivity {
         setContentView(R.layout.choose_level);
         main = (ConstraintLayout) findViewById(R.id.choose_constr);
         TextView tv = (TextView) findViewById(R.id.tv_choose);
+        Button back = (Button) findViewById(R.id.btn_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Choose_Level.this, Menu.class);
+                startActivity(i);
+            }
+        });
         Display display = getWindowManager().getDefaultDisplay();
         int width = (int) display.getWidth();
         final int dp = (int)((float)width * 0.2);
@@ -39,6 +47,7 @@ public class Choose_Level extends AppCompatActivity {
             btn.setId(i+1);
             String text = Integer.toString(i + 1);
             btn.setText(text);
+            btn.setTextSize(20);
             btn.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.pixel_bold));
             ConstraintLayout.LayoutParams lprams = new ConstraintLayout.LayoutParams(dp, dp);
             btn.setLayoutParams(lprams);

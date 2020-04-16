@@ -21,49 +21,29 @@ public class Battle{
         enemy = new Enemy(30, 30, cardList);
     }
 
-    public int fight(Card player, Card enemy, int mode) {
-        if (mode == 1) {    // первый бьёт игрок
-            BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + player.healthPoints + ")" +
-                    " наносит " + player.damagePoints + " урона " + enemy.name + " (" + enemy.damagePoints + ", " + enemy.healthPoints +
-                    ")");
-            enemy.healthPoints -= player.damagePoints;
-            if (enemy.healthPoints <= 0) {
-                BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + player.healthPoints + ")" +
-                        " победила " + enemy.name + " (" + enemy.damagePoints + ", 0)");
-                return 0;               // победа игрока
-            }
-            else {
-                BattleActivity.log.add("Карта противника " + enemy.name + "(" + enemy.damagePoints + ", " + enemy.healthPoints + ")" +
-                        " наносит контратаку " + player.name + " (" + player.damagePoints + ", " + player.healthPoints + ")");
-                player.healthPoints -= enemy.damagePoints;
-                if (player.healthPoints <= 0){
-                    BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", 0)" +
-                            " погибла от " + enemy.name + " (" + enemy.damagePoints + ", " + enemy.healthPoints + ")");
-                    return 1;
-                }
-            }
+    public int fight(Card player, Card enemy) {
+        int e_hp = enemy.healthPoints;
+        int p_hp = player.healthPoints;
+        enemy.healthPoints -= player.damagePoints;
+        player.healthPoints -= enemy.damagePoints;
+        if (enemy.healthPoints <= 0 && player.healthPoints <= 0){
+            BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + p_hp + ")" +
+                    " погибла от " + enemy.name + " (" + enemy.damagePoints + ", " + e_hp + "), но в ответ карта противника погибла!");
+            return 3;
+        } else if (enemy.healthPoints <= 0 && player.healthPoints > 0){
+            BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + p_hp + ")" +
+                    " победила " + enemy.name + " (" + enemy.damagePoints + ", " + e_hp +")");
+            return 2;
+        } else if (enemy.healthPoints > 0 && player.healthPoints <= 0){
+            BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + p_hp + ")" +
+                    " погибла от " + enemy.name + " (" + enemy.damagePoints + ", " + e_hp + ")");
+            return 1;
         } else {
-            BattleActivity.log.add("Вашей карте " + player.name + "(" + player.damagePoints + ", " + player.healthPoints + ")" +
-                " наносится урон " + enemy.damagePoints + " от " + enemy.name + " (" + enemy.damagePoints + ", " + enemy.healthPoints +
-                ")");
-            player.healthPoints -= enemy.damagePoints;
-            if (player.healthPoints <= 0) {
-                BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", 0)" +
-                        " погибла от " + enemy.name + " (" + enemy.damagePoints + ", " + enemy.healthPoints + ")");
-                return 1;               // победа врага
-            }
-            else {
-                BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + player.healthPoints + ")" +
-                        " наносит контратаку " + enemy.name + " (" + enemy.damagePoints + ", " + enemy.healthPoints + ")");
-                enemy.healthPoints -= player.damagePoints;
-                if (enemy.healthPoints <= 0){
-                    BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + player.healthPoints + ")" +
-                            " победила " + enemy.name + " (" + enemy.damagePoints + ", 0)");
-                    return 0;
-                }
-            }
+            BattleActivity.log.add("Ваша карта " + player.name + "(" + player.damagePoints + ", " + p_hp + ")" +
+                    " наносит " + player.damagePoints + " урона " + enemy.name + " (" + enemy.damagePoints + ", " + e_hp +
+                    ") и теряет " + (p_hp - player.healthPoints) + " здоровья");
+            return 0;
         }
-        return 2;
     }
 
 

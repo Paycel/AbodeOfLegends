@@ -291,12 +291,12 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         card.setForeground(null);
     }
 
-    private void fight(LinearLayout cardPlayer, LinearLayout cardEnemy, int mode){
+    private void fight(LinearLayout cardPlayer, LinearLayout cardEnemy){
         if (cardEnemy == null) return;
         int idPlayer = firstToSecond(cardPlayer).getId();
         int idEnemy = firstToSecond(cardEnemy).getId();
-        int result = battle.fight(findCard(idPlayer), findCard(idEnemy), mode);
-        if (result == 0){ // победа игрока
+        int result = battle.fight(findCard(idPlayer), findCard(idEnemy));
+        if (result == 2){ // победа игрока
             battle.enemy.cardList.remove(findCard(firstToSecond(cardEnemy).getId()));
             deleteCard(cardEnemy);
             setCardStats(cardPlayer);
@@ -304,9 +304,14 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             battle.player.cardList.remove(findCard(firstToSecond(cardPlayer).getId()));
             deleteCard(cardPlayer);
             setCardStats(cardEnemy);
-        } else{
+        } else if (result == 0){
            setCardStats(cardEnemy);
            setCardStats(cardPlayer);
+        } else {
+            battle.player.cardList.remove(findCard(firstToSecond(cardPlayer).getId()));
+            battle.enemy.cardList.remove(findCard(firstToSecond(cardEnemy).getId()));
+            deleteCard(cardEnemy);
+            deleteCard(cardPlayer);
         }
         updateSTATS();
     }
@@ -315,6 +320,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         final int num = (int) (Math.random() * enemyDeck.getChildCount());
         final boolean beatPlayer = Math.floor(Math.random() * 2) == 1 || playerTable.getChildCount() == 0; // true - бить игрока
         final boolean emptyDeck = enemyDeck.getChildCount() == 0;
+        if (enemyTable.getChildCount() == 4) return;
         if (!emptyDeck) {
             LinearLayout temp = (LinearLayout) enemyDeck.getChildAt(num);
             firstToSecond(temp).setOnClickListener(this);
@@ -380,7 +386,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void run() {
                             if (playerTable.getChildCount() == 0) return;
-                            fight((LinearLayout) playerTable.getChildAt(rndPlayer), (LinearLayout) enemyTable.getChildAt(rndEnemy), 2);
+                            fight((LinearLayout) playerTable.getChildAt(rndPlayer), (LinearLayout) enemyTable.getChildAt(rndEnemy));
                             clearTappedCard((LinearLayout) playerTable.getChildAt(rndPlayer));
                             clearTappedCard((LinearLayout) enemyTable.getChildAt(rndEnemy));
                             endLevel(isEnd());
@@ -400,7 +406,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void run() {
                 if (player != null && enemy != null)
-                    fight(player, enemy, 1);
+                    fight(player, enemy);
                 endLevel(isEnd());
             }
         });
@@ -539,6 +545,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                             setActiveCard((LinearLayout) playerTable.getChildAt(i));
                     deactivateButton(buttonMOVE);
                     deactivateButton(buttonOK);
+                    deactivateButton(buttonFACE);
                     moveCount++;
                     BattleActivity.log.add( "Ход " + ((int) (moveCount + 1) / 2) + ": ");
                     enemyMove();
@@ -548,6 +555,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         public void run() {
                             activateButton(buttonMOVE);
                             activateButton(buttonOK);
+                            activateButton(buttonFACE);
                             for (int i = 0; i < playerTable.getChildCount(); i++)
                                 hideForeground((LinearLayout) playerTable.getChildAt(i));
                             if ((LinearLayout) enemyTable.getChildAt(enemyTable.getChildCount() - 1) != null)
@@ -564,7 +572,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     addCard(false);
                     Log.d(LOG_TAG_FIGHT, "SIZE_ENEMY = " + battle.enemy.cardList.size());
                     battle.player.manaPoints += 5;
-                    battle.enemy.healthPoints += 4 * (1 + difficulty / 10);
+                    battle.enemy.healthPoints += 2 * (1 + difficulty / 10);
                     battle.enemy.manaPoints += 3 * (1 + difficulty / 10);
                     updateSTATS();
                     break;

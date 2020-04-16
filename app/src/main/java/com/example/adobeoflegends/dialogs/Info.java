@@ -22,13 +22,15 @@ public class Info extends DialogFragment {
                 })
                 .setNegativeButton(getResources().getText(R.string.how_to_play).toString(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        Info_Second info_second = new Info_Second(false);
                         dismiss();
+                        info_second.show(BattleActivity.fragmentManager, "info_second");
                     }
                 })
                 .setNeutralButton(getResources().getText(R.string.journal).toString(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Info_Second info_second = new Info_Second();
+                        Info_Second info_second = new Info_Second(true);
                         dismiss();
                         info_second.show(BattleActivity.fragmentManager, "info_second_dialog");
                     }
