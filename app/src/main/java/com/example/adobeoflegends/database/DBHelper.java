@@ -54,6 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (email.equals(_email)) return points;
             } while (c.moveToNext());
         }
+        c.close();
         return -1;
     }
 
@@ -75,14 +76,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 Log.d(LOG_TAG, "ID = " + c.getInt(idColIndex) + ", email = " + _email + ", points = " + points);
             } while (c.moveToNext());
         }
+        c.close();
     }
 
     public int getRowsCount(SQLiteDatabase db){
-        Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
-        int count = 0;
-        if (c.moveToFirst()) {
-            count++;
-            } while (c.moveToNext());
+        Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_NAME, null);
+        c.moveToFirst();
+        int count = c.getInt(0);
+        c.close();
         return count;
     }
 

@@ -1,5 +1,6 @@
 package com.example.adobeoflegends.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -29,6 +30,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private Button buttonRandomGame;
@@ -52,22 +54,12 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main_menu);
         dbHelper = new DBHelper(this);
         dataBase = dbHelper.getWritableDatabase();
         sharedPreferences = getPreferences(MODE_PRIVATE);
         textPoints = (TextView) findViewById(R.id.points);
-        /*
-        TODO Ловить интент и записывать в preferences данные, которые передаются в Locale в БД
-        TODO Если есть учётная запись, то кидать данные из Locale в эту учётку
-
-        TODO Запуск приложения - создаётся Locale, где есть поинты
-        TODO Привязываешь аккаунт - поинты из Locale передаются аккаунту
-        TODO Если появляется 3 и т.д. строка в БД, присваивать тогда ей 0 поинтов
-        TODO Если currentUser != Locale, тогда присваивать поинты нужному аккаунту в БД
-         */
-
         points = getIntent().getIntExtra("points", 0);
         currentUser = getIntent().getStringExtra("currentUser");
         if (currentUser == null) currentUser = locale;
@@ -75,6 +67,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         dbHelper.setPoints(dataBase, currentUser, dbHelper.getPoints(dataBase, currentUser) + points);
         showPoints(currentUser);
         dbHelper.showInfo(dataBase);
+        Log.d(LOG_TAG, "Rows count = " + dbHelper.getRowsCount(dataBase));
         Log.d(LOG_TAG, "Loaded points = " + dbHelper.getPoints(dataBase, currentUser));
         buttonRandomGame = (Button) findViewById(R.id.btn_RandomGame);
         buttonLoad = (Button) findViewById(R.id.btn_Load);
@@ -156,8 +149,10 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         buttonRU.setOnClickListener(listener);
     }
 
+    @SuppressLint("SetTextI18n")
     void showPoints(String email){
         Log.d(LOG_TAG, "Current user = " + currentUser);
+        if (dbHelper.getPoints(dataBase, email) == -1) dbHelper.addUser(dataBase, email, 0);
         textPoints.setText(getResources().getText(R.string.points).toString() + dbHelper.getPoints(dataBase, email));
     }
 
@@ -200,6 +195,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
             if (result.isSuccess()){
                 Log.d(LOG_TAG, "Login success!");
                 GoogleSignInAccount account = result.getSignInAccount();
+                assert account != null;
                 String email = account.getEmail();
                 String name = account.getDisplayName();
                 Log.d(LOG_TAG, "EMAIL = " + email + "\nNAME = " + name);
@@ -222,14 +218,13 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
     private void handleSignInResult(GoogleSignInResult result){
         if (result.isSuccess()){
             GoogleSignInAccount account = result.getSignInAccount();
+            assert account != null;
             String email = account.getEmail();
             currentUser = email;
             showPoints(currentUser);
             String name = account.getDisplayName();
             Log.d(LOG_TAG, "EMAIL = " + email + "\nNAME = " + name);
-
             points = dbHelper.getPoints(dataBase, email);
-
             Log.d(LOG_TAG, "Points = " + points);
             try{
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
