@@ -38,11 +38,11 @@ import java.util.List;
 
 public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
     public static Battle battle;
+    private static int points;
     private LinearLayout enemyDeck;
     public static LinearLayout playerDeck;
     private LinearLayout enemyTable;
     private LinearLayout playerTable;
-    private LinearLayout INFO;
     public static LinearLayout MAIN;
     private Button buttonMOVE;
     private Button buttonOK;
@@ -60,6 +60,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     private int helper;
     private int rndEnemy, rndPlayer;
     private int tmp1, tmp2;
+    private int maxEnemyHP, maxEnemyMP, maxPlayerHP, maxPlayerMP;
     public static final String LOG_TAG_FIGHT = "Fight";
     public static final String LOG_TAG_SIZE = "Size";
     public static final String LOG_TAG_DELAY = "Delay";
@@ -67,6 +68,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     private int api;
     public static ArrayList<String> log;
     public static int difficulty;
+    public static String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void imagePress(View v, boolean isImagePressed, int duration){
-        findCard(firstToSecond((LinearLayout) v).getId()).isTapped = !isImagePressed;
+        findCard(firstToSecond((LinearLayout) v).getId()).setTapped(!isImagePressed);
         if (!isImagePressed) v.animate().scaleX(0.7f).scaleY(0.7f).setDuration(duration);
         if (isImagePressed) v.animate().scaleX(1f).scaleY(1f).setDuration(duration);
     }
@@ -123,23 +125,28 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     private void setElementsAndParams(){
         fragmentManager = getSupportFragmentManager();
         log = new ArrayList<>();
-        log.add("*Это ваш журнал боя*");
+        log.add(getResources().getText(R.string.journal_start).toString());
         helper = 0;
         tmp1 = 0;
         tmp2 = 0;
+        currentUser = getIntent().getStringExtra("currentUser");
+        points = getIntent().getIntExtra("points", 0);
         difficulty = getIntent().getIntExtra("difficulty", 0);
         if (difficulty == 0) difficulty = (int) (4 + Math.random() * 8);
         Log.d(LOG_TAG_FIGHT, "DIFF = " + difficulty);
-        Battle.numsOfCards = difficulty + 4;
+        Battle.setNumsOfCards(difficulty + 4);
         battle = new Battle();
-        battle.enemy.healthPoints *= (1 + (float)difficulty / 10);
-        battle.enemy.manaPoints *= (1 + (float)difficulty / 10);
+        battle.setEnemyHP((int)(battle.getEnemyHP() * (1 + (float)difficulty / 10)));
+        battle.setEnemyMP((int)(battle.getEnemyMP() * (1 + (float)difficulty / 10)));
+        maxEnemyHP = battle.getEnemyHP();
+        maxEnemyMP = battle.getEnemyMP();
+        maxPlayerHP = battle.getPlayerHP();
+        maxPlayerMP = battle.getPlayerMP();
         MAIN = (LinearLayout) findViewById(R.id.MAIN);
         enemyDeck = (LinearLayout) findViewById(R.id.enemy_deck);
         playerDeck = (LinearLayout) findViewById(R.id.player_deck);
         playerTable = (LinearLayout) findViewById(R.id.player_table);
         enemyTable = (LinearLayout) findViewById(R.id.enemy_table);
-        INFO = (LinearLayout) findViewById(R.id.info);
         buttonMOVE = (Button) findViewById(R.id.btn_move);
         buttonOK = (Button) findViewById(R.id.btn_OK);
         buttonFACE = (Button) findViewById(R.id.btn_ToFace);
@@ -162,6 +169,10 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         buttonMOVE.setOnClickListener(this);
         buttonINFO.setOnClickListener(this);
         moveCount = 0;
+    }
+
+    public static int getPoints() {
+        return points;
     }
 
     @Override
@@ -195,7 +206,6 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     private void showCardInfo(View v){
         dialog_show = new ShowCardDialog((ConstraintLayout) v);
         dialog_show.show(fragmentManager, "ShowCard_Dialog");
-
     }
 
     // LINEAR
@@ -237,7 +247,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         // 2 - Дракон - мана
         ImageView HP = (ImageView) s_card.getChildAt(1);
         Card person = findCard(s_card.getId());
-        switch (person.healthPoints){
+        switch (person.getHealthPoints()){
             case 1: HP.setImageResource(R.drawable.one); break;
             case 2: HP.setImageResource(R.drawable.two); break;
             case 3: HP.setImageResource(R.drawable.three); break;
@@ -252,14 +262,14 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public static Card findCard(int id) {
-        for (int j = 0; j < battle.player.cardList.size(); j++) {
-            if (battle.player.cardList.get(j).viewID == id) {
-                return battle.player.cardList.get(j);
+        for (int j = 0; j < battle.getPlayer().getCardList().size(); j++) {
+            if (battle.getPlayer().getCardList().get(j).getViewID() == id) {
+                return battle.getPlayer().getCardList().get(j);
             }
         }
-        for (int j = 0; j < battle.enemy.cardList.size(); j++) {
-            if (battle.enemy.cardList.get(j).viewID == id) {
-                return battle.enemy.cardList.get(j);
+        for (int j = 0; j < battle.getEnemy().getCardList().size(); j++) {
+            if (battle.getEnemy().getCardList().get(j).getViewID() == id) {
+                return battle.getEnemy().getCardList().get(j);
             }
         }
         // never reached
@@ -267,8 +277,11 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private int isEnd(){
-        if (battle.player.healthPoints <= 0 || (battle.player.cardList.size() == 0)) return 1; // проиграл игрок
-        else if (battle.enemy.healthPoints <= 0 || (battle.enemy.cardList.size() == 0)) return 2;
+        if (battle.getPlayerHP() <= 0 || (battle.getPlayer().getCardList().size() == 0)) return 1; // проиграл игрок
+        else if (battle.getEnemyHP() <= 0 || (battle.getEnemy().getCardList().size() == 0)) {
+            points += 10;
+            return 2;
+        }
         return 0;
     }
 
@@ -297,22 +310,24 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         int idEnemy = firstToSecond(cardEnemy).getId();
         int result = battle.fight(findCard(idPlayer), findCard(idEnemy));
         if (result == 2){ // победа игрока
-            battle.enemy.cardList.remove(findCard(firstToSecond(cardEnemy).getId()));
+            points += 1;
+            battle.getEnemy().getCardList().remove(findCard(firstToSecond(cardEnemy).getId()));
             deleteCard(cardEnemy);
             setCardStats(cardPlayer);
         } else if (result == 1){ // победа врага
-            battle.player.cardList.remove(findCard(firstToSecond(cardPlayer).getId()));
+            battle.getPlayer().getCardList().remove(findCard(firstToSecond(cardPlayer).getId()));
             deleteCard(cardPlayer);
             setCardStats(cardEnemy);
         } else if (result == 0){
            setCardStats(cardEnemy);
            setCardStats(cardPlayer);
         } else {
-            battle.player.cardList.remove(findCard(firstToSecond(cardPlayer).getId()));
-            battle.enemy.cardList.remove(findCard(firstToSecond(cardEnemy).getId()));
+            battle.getPlayer().getCardList().remove(findCard(firstToSecond(cardPlayer).getId()));
+            battle.getEnemy().getCardList().remove(findCard(firstToSecond(cardEnemy).getId()));
             deleteCard(cardEnemy);
             deleteCard(cardPlayer);
         }
+        Log.d("LOGS", "Points (battle) = " + points);
         updateSTATS();
     }
 
@@ -320,8 +335,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         final int num = (int) (Math.random() * enemyDeck.getChildCount());
         final boolean beatPlayer = Math.floor(Math.random() * 2) == 1 || playerTable.getChildCount() == 0; // true - бить игрока
         final boolean emptyDeck = enemyDeck.getChildCount() == 0;
-        if (enemyTable.getChildCount() == 4) return;
-        if (!emptyDeck) {
+        if (!emptyDeck && enemyTable.getChildCount() != 4) {
             LinearLayout temp = (LinearLayout) enemyDeck.getChildAt(num);
             firstToSecond(temp).setOnClickListener(this);
             firstToSecond(temp).setOnLongClickListener(onLongClickListener);
@@ -362,11 +376,11 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            log.add("Вы (HP: " + battle.player.healthPoints + ") получаете " + findCard(firstToSecond(finalEnemy).getId()).damagePoints +
-                                    " урона от карты " + findCard(firstToSecond(finalEnemy).getId()).name +
-                                    " (" + findCard(firstToSecond(finalEnemy).getId()).damagePoints + ", " +
-                                    findCard(firstToSecond(finalEnemy).getId()).healthPoints + ")");
-                            battle.player.healthPoints -= findCard(firstToSecond(finalEnemy).getId()).damagePoints;
+                            log.add("Вы (HP: " + battle.getPlayerHP() + ") получаете " + findCard(firstToSecond(finalEnemy).getId()).getDamagePoints() +
+                                    " урона от карты " + findCard(firstToSecond(finalEnemy).getId()).getName() +
+                                    " (" + findCard(firstToSecond(finalEnemy).getId()).getDamagePoints() + ", " +
+                                    findCard(firstToSecond(finalEnemy).getId()).getHealthPoints() + ")");
+                            battle.setPlayerHP(battle.getPlayerHP() - findCard(firstToSecond(finalEnemy).getId()).getDamagePoints());
                             updateSTATS();
                             clearTappedCard(finalEnemy);
                             endLevel(isEnd());
@@ -413,32 +427,32 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private boolean isActiveCard(LinearLayout card){
-        return findCard(firstToSecond(card).getId()).active;
+        return findCard(firstToSecond(card).getId()).isActive();
     }
 
     private boolean isTappedCard(LinearLayout card) {
-        return findCard(firstToSecond(card).getId()).isTapped;
+        return findCard(firstToSecond(card).getId()).isTapped();
     }
 
     private void updateSTATS(){
-        playerSTATS.setText(getResources().getText(R.string.player).toString() + "\n" + getResources().getText(R.string.hp) + battle.player.healthPoints + " "
-                + getResources().getText(R.string.mp) + battle.player.manaPoints + "\n" + getResources().getText(R.string.cards) + (battle.player.cardList.size() - playerTable.getChildCount() - playerDeck.getChildCount()));
-        enemySTATS.setText(getResources().getText(R.string.enemy).toString() + "\n" + getResources().getText(R.string.hp) + battle.enemy.healthPoints + "\n" +
-                getResources().getText(R.string.cards) + (battle.enemy.cardList.size() - enemyTable.getChildCount() - enemyDeck.getChildCount()));
+        playerSTATS.setText(getResources().getText(R.string.player).toString() + "\n" + getResources().getText(R.string.hp) + battle.getPlayerHP() + " "
+                + getResources().getText(R.string.mp) + battle.getPlayerMP() + "\n" + getResources().getText(R.string.cards) + (battle.getPlayer().getCardList().size() - playerTable.getChildCount() - playerDeck.getChildCount()));
+        enemySTATS.setText(getResources().getText(R.string.enemy).toString() + "\n" + getResources().getText(R.string.hp) + battle.getEnemyHP() + "\n" +
+                getResources().getText(R.string.cards) + (battle.getEnemy().getCardList().size() - enemyTable.getChildCount() - enemyDeck.getChildCount()));
     }
 
     private void setActiveCard(LinearLayout card){
-        findCard(firstToSecond(card).getId()).active = true;
+        findCard(firstToSecond(card).getId()).setActive(true);
     }
 
     private void setDeactiveCard(LinearLayout card){
-        findCard(firstToSecond(card).getId()).active = false;
+        findCard(firstToSecond(card).getId()).setActive(false);
     }
 
     private boolean EnoughMP(LinearLayout card){
         if (card == null) return false;
-        if (findCard(firstToSecond(card).getId()).cost > battle.player.manaPoints){
-            Toast.makeText(this, "Недостаточно маны!", Toast.LENGTH_SHORT).show();
+        if (findCard(firstToSecond(card).getId()).getCost() > battle.getPlayerMP()){
+            Toast.makeText(this, getResources().getText(R.string.no_mana).toString(), Toast.LENGTH_SHORT).show();
             imagePress(card, true, 200);
             return false;
         }
@@ -503,7 +517,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             switch (v.getId()) {
                 case R.id.btn_OK:
                     if (tappedCard == null || noPlace() || !EnoughMP(tappedCard)) return;
-                    battle.player.manaPoints -= findCard(firstToSecond(tappedCard).getId()).cost;
+                    battle.setPlayerMP(battle.getPlayerMP() - findCard(firstToSecond(tappedCard).getId()).getCost());
                     updateSTATS();
                     moveOnTable(tappedCard, playerTable);
                     imagePress(tappedCard, true, 0);
@@ -515,11 +529,11 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(this, getResources().getText(R.string.choose_card).toString(), Toast.LENGTH_SHORT).show();
                     } else {
                         if (enemyCard == null && playerCard != null){
-                            log.add("Противник (HP: " + battle.enemy.healthPoints + ") получает " + findCard(firstToSecond(playerCard).getId()).damagePoints +
-                                    " урона от вашей карты " + findCard(firstToSecond(playerCard).getId()).name +
-                                    " (" + findCard(firstToSecond(playerCard).getId()).damagePoints + ", " +
-                                    findCard(firstToSecond(playerCard).getId()).healthPoints + ")");
-                            battle.enemy.healthPoints -= findCard(firstToSecond(playerCard).getId()).damagePoints;
+                            log.add("Противник (HP: " + battle.getEnemyHP() + ") получает " + findCard(firstToSecond(playerCard).getId()).getDamagePoints() +
+                                    " урона от вашей карты " + findCard(firstToSecond(playerCard).getId()).getName() +
+                                    " (" + findCard(firstToSecond(playerCard).getId()).getDamagePoints() + ", " +
+                                    findCard(firstToSecond(playerCard).getId()).getHealthPoints() + ")");
+                            battle.setEnemyHP(battle.getEnemyHP() - findCard(firstToSecond(playerCard).getId()).getDamagePoints());
                         } else if (enemyCard != null & playerCard != null){
                             playerMove(playerCard, enemyCard);
                         }
@@ -570,10 +584,15 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     playerCard = null;
                     addCard(true);
                     addCard(false);
-                    Log.d(LOG_TAG_FIGHT, "SIZE_ENEMY = " + battle.enemy.cardList.size());
-                    battle.player.manaPoints += 5;
-                    battle.enemy.healthPoints += 2 * (1 + difficulty / 10);
-                    battle.enemy.manaPoints += 3 * (1 + difficulty / 10);
+                    Log.d(LOG_TAG_FIGHT, "SIZE_ENEMY = " + battle.getEnemy().getCardList().size());
+                    if (battle.getPlayerMP() + 5 <= maxPlayerHP) battle.setPlayerMP(battle.getPlayerMP() + 5);
+                    else battle.setPlayerMP(maxPlayerMP);
+                    if (battle.getEnemyHP() + 2 * (1 + (float)difficulty / 10) <= maxEnemyHP)
+                        battle.setEnemyHP((int)(battle.getEnemyHP() + 2 * (1 + (float)difficulty / 10)));
+                    else battle.setEnemyHP(maxEnemyHP);
+                    if (battle.getEnemyMP() + 3 * (1 + (float)difficulty / 10) <= maxEnemyMP)
+                        battle.setEnemyMP((int)(battle.getEnemyMP() + 3 * (1 + (float)difficulty / 10)));
+                    else battle.setEnemyMP(maxEnemyMP);
                     updateSTATS();
                     break;
             }
@@ -584,11 +603,11 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         List<Card> list;
         LinearLayout table1, table2;
         if (player) {
-            list = battle.player.cardList;
+            list = battle.getPlayer().getCardList();
             table1 = playerTable;
             table2 = playerDeck;
         } else {
-            list = battle.enemy.cardList;
+            list = battle.getEnemy().getCardList();
             table1 = enemyTable;
             table2 = enemyDeck;
         }
@@ -596,14 +615,14 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         for (int r = 0; r < list.size(); r++) {
             boolean temp_found = true;
             for (int i = 0; i < table1.getChildCount(); i++) {
-                if (list.get(r).viewID == firstToSecond((LinearLayout) table1.getChildAt(i)).getId()) {
+                if (list.get(r).getViewID() == firstToSecond((LinearLayout) table1.getChildAt(i)).getId()) {
                     temp_found = false;
                     break;
                 }
             }
             if (temp_found) {
                 for (int i = 0; i < table2.getChildCount(); i++) {
-                    if (list.get(r).viewID == firstToSecond((LinearLayout)table2.getChildAt(i)).getId()) {
+                    if (list.get(r).getViewID() == firstToSecond((LinearLayout)table2.getChildAt(i)).getId()) {
                         temp_found = false;
                         break;
                     }
@@ -710,12 +729,12 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         ConstraintLayout ll = new ConstraintLayout(cv.getContext());
         ll.setId(View.generateViewId());
         if (table == playerDeck) {
-            battle.player.cardList.get(i).viewID = ll.getId();
+            battle.getPlayer().getCardList().get(i).setViewID(ll.getId());
         } else {
-            battle.enemy.cardList.get(i).viewID = ll.getId();
+            battle.getEnemy().getCardList().get(i).setViewID(ll.getId());
         }
         ll.setLayoutParams(lParams);
-        ll.setBackgroundResource(findCard(ll.getId()).pictureID);
+        ll.setBackgroundResource(findCard(ll.getId()).getPictureID());
         ll.setPadding(5, 0, 0, 0);
         ll.setClickable(true);
         ll.setEnabled(true);
@@ -733,7 +752,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         imageHP.setId(View.generateViewId());
         imageHP.setLayoutParams(imageParams);
         Card myCard = findCard(ll.getId());
-        switch (myCard.healthPoints) {
+        switch (myCard.getHealthPoints()) {
             case 1: imageHP.setImageResource(R.drawable.one); break;
             case 2: imageHP.setImageResource(R.drawable.two); break;
             case 3: imageHP.setImageResource(R.drawable.three); break;
@@ -749,7 +768,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         ImageView imageDP = new ImageView(ll.getContext());
         imageDP.setId(View.generateViewId());
         imageDP.setLayoutParams(imageParams);
-        switch (myCard.damagePoints) {
+        switch (myCard.getDamagePoints()) {
             case 1: imageDP.setImageResource(R.drawable.one); break;
             case 2: imageDP.setImageResource(R.drawable.two); break;
             case 3: imageDP.setImageResource(R.drawable.three); break;
@@ -765,7 +784,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         ImageView imageCOST = new ImageView(ll.getContext());
         imageCOST.setId(View.generateViewId());
         imageCOST.setLayoutParams(imageParams);
-        switch (myCard.cost) {
+        switch (myCard.getCost()) {
             case 1: imageCOST.setImageResource(R.drawable.one); break;
             case 2: imageCOST.setImageResource(R.drawable.two); break;
             case 3: imageCOST.setImageResource(R.drawable.three); break;
@@ -810,6 +829,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         ExitDialog exitDialog = new ExitDialog();
+        Log.d("LOGS", "Points (toDialog) = " + points);
         exitDialog.show(fragmentManager, "exit_dialog");
     }
 }

@@ -13,6 +13,8 @@ import com.example.adobeoflegends.activity.BattleActivity;
 import com.example.adobeoflegends.activity.Menu;
 import com.example.adobeoflegends.R;
 
+import static com.example.adobeoflegends.activity.BattleActivity.currentUser;
+
 public class EndGameDialog extends DialogFragment {
     /*
     mode - выбор режима:
@@ -43,6 +45,7 @@ public class EndGameDialog extends DialogFragment {
                 builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), Menu.class);
+                        i.putExtra("points", BattleActivity.getPoints());
                         startActivity(i);
                     }
                 });
@@ -50,6 +53,7 @@ public class EndGameDialog extends DialogFragment {
                 builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), BattleActivity.class);
+                        i.putExtra("points", BattleActivity.getPoints());
                         startActivity(i);
                     }
                 });
@@ -63,6 +67,8 @@ public class EndGameDialog extends DialogFragment {
                 builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), Menu.class);
+                        i.putExtra("points", BattleActivity.getPoints());
+                        i.putExtra("currentUser", currentUser);
                         startActivity(i);
                     }
                 });
@@ -70,6 +76,8 @@ public class EndGameDialog extends DialogFragment {
                 builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), BattleActivity.class);
+                        i.putExtra("points", BattleActivity.getPoints());
+                        i.putExtra("currentUser", currentUser);
                         startActivity(i);
                     }
                 });
@@ -78,7 +86,9 @@ public class EndGameDialog extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Intent i = new Intent(getActivity(), BattleActivity.class);
+                            i.putExtra("points", BattleActivity.getPoints());
                             i.putExtra("difficulty", BattleActivity.difficulty + 1);
+                            i.putExtra("currentUser", currentUser);
                             startActivity(i);
                         }
                     });

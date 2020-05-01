@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AdobeOfLegends</string>
+    <string name="name">Adobe Of Legends</string>
+    <string name="load">Loading</string>
+    <string name="randomly">Random level</string>
+    <string name="choose_level">Choose level</string>
+    <string name="load_results">Your achievements</string>
+    <string name="shop">Shop</string>
+    <string name="next_move">Move</string>
+    <string name="end_title_lose">You lose!</string>
+    <string name="end_message_lose">Not now!</string>
+    <string name="end_title_win">You win!</string>
+    <string name="end_message_win">Congratulations on your victory! Go to the next level?</string>
+    <string name="next_level">Go</string>
+    <string name="last_level">" Congratulations! It was the last level!"</string>
+    <string name="again">Start again</string>
+    <string name="exit">Exit</string>
+    <string name="no_space">No space for cards!</string>
+    <string name="player">Player:</string>
+    <string name="enemy">Enemy:</string>
+    <string name="cards">Cards:</string>
+    <string name="choose_card">You must choose a card to strike!</string>
+    <string name="exit_dialog_title" translatable="false">"Exit to the main menu"</string>
+    <string name="exit_dialog_message" translatable="false">Do you really want to leave?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="no_cards" translatable="false">Out of cards!</string>
+    <string name="info_message">What do you want to know?</string>
+    <string name="journal">Battle log</string>
+    <string name="how_to_play">How to play?</string>
+    <string name="close">Close</string>
+    <string name="choose">Choose level</string>
+    <string name="back">Back</string>
+    <string name="info_1" translatable="false">You have health and mana points, they are worth watching. For mana points, cards are thrown onto the table. If health drops to 0, you will die!</string>
+    <string name="info_2">Before you is your deck, your table, the opponent’s table and his deck.</string>
+    <string name="info_3">All the action takes place on the table, cards are thrown out from the deck.</string>
+    <string name="info_4">Each card has damage, health and its value. Damage is located at the bottom left, health is at the bottom right, and the cost (in mana points) is at the top right.</string>
+    <string name="info_5">To throw a card on the table, click on the card from your deck and on the checkmark.</string>
+    <string name="info_6">Once you have done this, it becomes inactive, it can no longer be selected until the next move.</string>
+    <string name="info_7">When you press the MOVE button, the opponent comes off and your cards unfreeze. Also, if you did not notice what the enemy did, there is an information button, as you got here, there is a Move Log.</string>
+    <string name="info_8">How to beat?</string>
+    <string name="info_9">First you need to select a card from the table to go to it, now either:</string>
+    <string name="info_10">1) You do not select a card from the opponent’s table and click on the Strike button - this is a button with swords, then you will hit the opponent specifically.</string>
+    <string name="info_11">2) You select a card from the opponent’s table and click on the Blow button - then your card beats the opponent’s card, which will definitely answer you!</string>
+    <string name="info_12">"That's all, good luck!"</string>
+    <string name="journal_start">"*This is your battle log.*"</string>
+    <string name="sign_in">Sign in</string>
+    <string name="no_mana">Not enough of mana!</string>
+    <string name="points">"Points: "</string>
+</resources>

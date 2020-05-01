@@ -2,8 +2,6 @@ package com.example.adobeoflegends.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ScrollView;
@@ -12,11 +10,8 @@ import android.widget.TextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.adobeoflegends.Battle;
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.activity.BattleActivity;
-
-import java.util.ArrayList;
 
 public class Info_Second extends DialogFragment {
     private boolean journal;

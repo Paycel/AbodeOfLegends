@@ -15,20 +15,24 @@
     <string name="last_level">Поздравляем! Это был последний уровень!</string>
     <string name="again">Начать заново</string>
     <string name="exit">Выход</string>
-    <string name="OK">2713</string>
-    <string name="NO">2716</string>
-    <string name="INFO">24D8</string>
-    <string name="sword">2694</string>
-    <string name="heart">2665</string>
+    <string name="journal_start">Это ваш журнал боя</string>
+    <string name="OK" translatable="false">2713</string>
+    <string name="NO" translatable="false">2716</string>
+    <string name="INFO" translatable="false">24D8</string>
+    <string name="sword" translatable="false">2694</string>
+    <string name="heart" translatable="false">2665</string>
     <string name="no_space">Нет места для карт!</string>
     <string name="player">Игрок: </string>
     <string name="enemy">Соперник: </string>
-    <string name="hp">HP: </string>
-    <string name="mp">MP: </string>
+    <string name="no_mana">Недостаточно маны!</string>
+    <string name="points">"Очков: "</string>
+    <string name="sign_in">Войти</string>
+    <string name="hp" translatable="false">"HP: "</string>
+    <string name="mp" translatable="false">"MP: "</string>
     <string name="cards">Карт: </string>
     <string name="choose_card">Вы должны выбрать карту для удара!</string>
     <string name="exit_dialog_title">Выход в главное меню</string>
-    <string name="exit_dialog_message">Вы действительно хотите выйти? Прогресс будет утерян!</string>
+    <string name="exit_dialog_message">Вы действительно хотите выйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="no_cards">Закончились карты!</string>
@@ -37,21 +41,21 @@
     <string name="how_to_play">Как играть?</string>
     <string name="close">Закрыть</string>
     <string name="choose">Выберите уровень</string>
-    <string name="one">1</string>
-    <string name="two">2</string>
-    <string name="three">3</string>
-    <string name="four">4</string>
-    <string name="five">5</string>
-    <string name="six">6</string>
-    <string name="seven">7</string>
-    <string name="eight">8</string>
-    <string name="nine">9</string>
-    <string name="ten">10</string>
-    <string name="eleven">11</string>
-    <string name="twelve">12</string>
-    <string name="thirteen">13</string>
-    <string name="fourteen">14</string>
-    <string name="fifteen">15</string>
+    <string name="one" translatable="false">1</string>
+    <string name="two" translatable="false">2</string>
+    <string name="three" translatable="false">3</string>
+    <string name="four" translatable="false">4</string>
+    <string name="five" translatable="false">5</string>
+    <string name="six" translatable="false">6</string>
+    <string name="seven" translatable="false">7</string>
+    <string name="eight" translatable="false">8</string>
+    <string name="nine" translatable="false">9</string>
+    <string name="ten" translatable="false">10</string>
+    <string name="eleven" translatable="false">11</string>
+    <string name="twelve" translatable="false">12</string>
+    <string name="thirteen" translatable="false">13</string>
+    <string name="fourteen" translatable="false">14</string>
+    <string name="fifteen" translatable="false">15</string>
     <string name="back">Назад</string>
     <string name="info_1">У вас есть здоровье и очки маны, за ними стоит следить. За очки маны на стол выбрасываются карты. Если здоровье опустится до 0 - вы умрете!
 </string>
@@ -65,17 +69,15 @@
 </string>
     <string name="info_6">Как только вы это сделали, она становится неактивной, ее уже нельзя выбрать до следующего хода.
 </string>
-    <string name="info_7">При нажатии на кнопку "ХОД" сходит противник, а ваши карты разморозятся. Также, если вы не заметили, что сделал противник, существует кнопка информации, как вы сюда и перешли, тут есть Журнал ходов.
-</string>
+    <string name="info_7">При нажатии на кнопку ХОД сходит противник, а ваши карты разморозятся. Также, если вы не заметили, что сделал противник, существует кнопка информации, как вы сюда и перешли, тут есть Журнал ходов.</string>
     <string name="info_8">Как бить?
 </string>
     <string name="info_9">Сначала вам нужно выбрать карту со стола, чтобы сходить ей, теперь либо:
 </string>
     <string name="info_10">1) Вы не выбираете карту со стола соперника и нажимаете на кнопку Удара - это кнопка с мечами, тогда вы ударите конкретно по сопернику.
 </string>
-    <string name="info_11">2) Вы выбираете карту со стола соперника и нажимаете на кнопку Удара - тогда ваша карта бьет карту соперника, которая вам обязательно ответит!
-</string>
     <string name="info_12">На этом все, удачи!</string>
+    <string name="info_11">2) Вы выбираете карту со стола соперника и нажимаете на кнопку Удара - тогда ваша карта бьет карту соперника, которая вам обязательно ответит!</string>
 
 
 </resources>

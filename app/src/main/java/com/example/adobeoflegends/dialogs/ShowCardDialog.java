@@ -37,13 +37,13 @@ public class ShowCardDialog extends DialogFragment {
         int imageWidth = (int) ((float) width * 0.2);
         int imageHeight = (int) ((float) height * 0.2);
         Card myCard = findCard(card.getId());
-        copy.setBackgroundResource(myCard.pictureID);
+        copy.setBackgroundResource(myCard.getPictureID());
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(imageWidth, imageHeight);
         ImageView imageHP = new ImageView(copy.getContext());
         imageHP.setId(View.generateViewId());
         imageHP.setLayoutParams(imageParams);
         imageHP.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        switch (myCard.healthPoints){
+        switch (myCard.getHealthPoints()){
             case 1: imageHP.setImageResource(R.drawable.one); break;
             case 2: imageHP.setImageResource(R.drawable.two); break;
             case 3: imageHP.setImageResource(R.drawable.three); break;
@@ -58,7 +58,7 @@ public class ShowCardDialog extends DialogFragment {
         ImageView imageDP = new ImageView(copy.getContext());
         imageDP.setId(View.generateViewId());
         imageDP.setLayoutParams(imageParams);
-        switch (myCard.damagePoints){
+        switch (myCard.getDamagePoints()){
             case 1: imageDP.setImageResource(R.drawable.one); break;
             case 2: imageDP.setImageResource(R.drawable.two); break;
             case 3: imageDP.setImageResource(R.drawable.three); break;
@@ -73,7 +73,7 @@ public class ShowCardDialog extends DialogFragment {
         ImageView imageCOST = new ImageView(copy.getContext());
         imageCOST.setId(View.generateViewId());
         imageCOST.setLayoutParams(imageParams);
-        switch (myCard.cost){
+        switch (myCard.getCost()){
             case 1: imageCOST.setImageResource(R.drawable.one); break;
             case 2: imageCOST.setImageResource(R.drawable.two); break;
             case 3: imageCOST.setImageResource(R.drawable.three); break;

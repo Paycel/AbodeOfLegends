@@ -10,8 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.adobeoflegends.activity.BattleActivity;
 import com.example.adobeoflegends.activity.Menu;
 import com.example.adobeoflegends.R;
+
+import static com.example.adobeoflegends.activity.BattleActivity.currentUser;
 
 public class ExitDialog extends DialogFragment {
     @NonNull
@@ -28,6 +31,8 @@ public class ExitDialog extends DialogFragment {
         builder.setPositiveButton(btnYes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent i = new Intent(getActivity(), Menu.class);
+                i.putExtra("points", BattleActivity.getPoints());
+                i.putExtra("currentUser", currentUser);
                 startActivity(i);
             }
         });

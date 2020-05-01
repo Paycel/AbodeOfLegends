@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/theme"
     android:orientation="vertical"
-    tools:context="com.example.adobeoflegends.Activity.MainActivity">
+    tools:context="com.example.adobeoflegends.activity.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,6 +32,16 @@
         android:gravity="center"
 
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/points"
+            android:layout_width="260dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/pixel_bold"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btn_RandomGame"
@@ -72,13 +82,91 @@
             android:text="@string/shop"
             android:textAllCaps="false" />
 
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        android:orientation="vertical">
+        android:gravity="start"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_ENG"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/eng" />
+
+            <Button
+                android:id="@+id/btn_RU"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rus" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_SIGNIN"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/google_button"
+                    android:drawableLeft="@drawable/google"
+                    android:padding="10dp"
+                    android:text="@string/sign_in"
+                    android:textAllCaps="false"
+                    android:textSize="15sp">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/btn_EXIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/google_button"
+                    android:text="@string/exit"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
