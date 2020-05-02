@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/theme"
     android:orientation="vertical"
-    tools:context="com.example.adobeoflegends.activity.MainActivity">
+    tools:context="com.example.adobeoflegends.activity.Main">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/btn_Load"
+            android:id="@+id/btn_achieve"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"

@@ -11,7 +11,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.adobeoflegends.R;
-import com.example.adobeoflegends.activity.BattleActivity;
+import com.example.adobeoflegends.activity.Battle;
 
 public class Info_Second extends DialogFragment {
     private boolean journal;
@@ -27,8 +27,8 @@ public class Info_Second extends DialogFragment {
         TextView textView = new TextView(scrollView.getContext());
         textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.pixel));
         if (journal)
-        for (int i = 0; i < BattleActivity.log.size(); i++){
-            textView.setText(textView.getText().toString() + BattleActivity.log.get(i) + "\n");
+        for (int i = 0; i < Battle.log.size(); i++){
+            textView.setText(textView.getText().toString() + Battle.log.get(i) + "\n");
         }
         else
             for (int i = 0; i < 12; i++){

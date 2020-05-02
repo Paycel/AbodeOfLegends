@@ -48,4 +48,6 @@
     <string name="sign_in">Sign in</string>
     <string name="no_mana">Not enough of mana!</string>
     <string name="points">"Points: "</string>
+    <string name="results">Top 10</string>
+    <string name="stage">"STAGE "</string>
 </resources>

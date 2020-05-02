@@ -26,8 +26,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.adobeoflegends.Battle;
-import com.example.adobeoflegends.Card;
+import com.example.adobeoflegends.objects.Card;
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.dialogs.EndGameDialog;
 import com.example.adobeoflegends.dialogs.ExitDialog;
@@ -38,9 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
-    public static Battle battle;
+public class Battle extends AppCompatActivity implements View.OnClickListener {
+    public static com.example.adobeoflegends.objects.Battle battle;
     private static int points;
+    private static int levelPoints;
     private LinearLayout enemyDeck;
     @SuppressLint("StaticFieldLeak")
     public static LinearLayout playerDeck;
@@ -124,20 +124,25 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         if (isImagePressed) v.animate().scaleX(1f).scaleY(1f).setDuration(duration);
     }
 
+    public static int getLevelPoints() {
+        return levelPoints;
+    }
+
     private void setElementsAndParams(){
         fragmentManager = getSupportFragmentManager();
         log = new ArrayList<>();
         log.add(getResources().getText(R.string.journal_start).toString());
         helper = 0;
         tmp1 = 0;
+        levelPoints = 0;
         tmp2 = 0;
         currentUser = getIntent().getStringExtra("currentUser");
         points = getIntent().getIntExtra("points", 0);
         difficulty = getIntent().getIntExtra("difficulty", 0);
         if (difficulty == 0) difficulty = (int) (4 + Math.random() * 8);
         Log.d(LOG_TAG_FIGHT, "DIFF = " + difficulty);
-        Battle.setNumsOfCards(difficulty + 4);
-        battle = new Battle();
+        com.example.adobeoflegends.objects.Battle.setNumsOfCards(difficulty + 4);
+        battle = new com.example.adobeoflegends.objects.Battle();
         battle.setEnemyHP((int)(battle.getEnemyHP() * (1 + (float)difficulty / 10)));
         battle.setEnemyMP((int)(battle.getEnemyMP() * (1 + (float)difficulty / 10)));
         maxEnemyHP = battle.getEnemyHP();
@@ -176,6 +181,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     public static int getPoints() {
         return points;
     }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -283,6 +289,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         if (battle.getPlayerHP() <= 0 || (battle.getPlayer().getCardList().size() == 0)) return 1; // проиграл игрок
         else if (battle.getEnemyHP() <= 0 || (battle.getEnemy().getCardList().size() == 0)) {
             points += 10;
+            levelPoints += 10;
             return 2;
         }
         return 0;
@@ -313,7 +320,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         int idEnemy = firstToSecond(cardEnemy).getId();
         int result = battle.fight(Objects.requireNonNull(findCard(idPlayer)), Objects.requireNonNull(findCard(idEnemy)));
         if (result == 2){ // победа игрока
-            points += 1;
+            points += 3;
+            levelPoints += 3;
             battle.getEnemy().getCardList().remove(findCard(firstToSecond(cardEnemy).getId()));
             deleteCard(cardEnemy);
             setCardStats(cardPlayer);
@@ -322,9 +330,13 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             deleteCard(cardPlayer);
             setCardStats(cardEnemy);
         } else if (result == 0){
+            points += 2;
+            levelPoints += 2;
            setCardStats(cardEnemy);
            setCardStats(cardPlayer);
         } else {
+            points += 1;
+            levelPoints += 1;
             battle.getPlayer().getCardList().remove(findCard(firstToSecond(cardPlayer).getId()));
             battle.getEnemy().getCardList().remove(findCard(firstToSecond(cardEnemy).getId()));
             deleteCard(cardEnemy);
@@ -565,7 +577,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     deactivateButton(buttonOK);
                     deactivateButton(buttonFACE);
                     moveCount++;
-                    BattleActivity.log.add( "Ход " + ((int) (moveCount + 1) / 2) + ": ");
+                    Battle.log.add( "Ход " + ((int) (moveCount + 1) / 2) + ": ");
                     enemyMove();
                     moveCount++;
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

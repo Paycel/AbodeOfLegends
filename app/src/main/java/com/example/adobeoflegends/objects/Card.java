@@ -1,4 +1,6 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.objects;
+
+import com.example.adobeoflegends.R;
 
 public class Card {
     private int healthPoints;

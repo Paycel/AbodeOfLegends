@@ -30,6 +30,8 @@
     <string name="hp" translatable="false">"HP: "</string>
     <string name="mp" translatable="false">"MP: "</string>
     <string name="cards">Карт: </string>
+    <string name="results">Топ 10</string>
+    <string name="stage">"ЭТАП "</string>
     <string name="choose_card">Вы должны выбрать карту для удара!</string>
     <string name="exit_dialog_title">Выход в главное меню</string>
     <string name="exit_dialog_message">Вы действительно хотите выйти?</string>

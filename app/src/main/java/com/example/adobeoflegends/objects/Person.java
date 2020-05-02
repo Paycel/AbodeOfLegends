@@ -1,6 +1,7 @@
-package com.example.adobeoflegends;
+package com.example.adobeoflegends.objects;
 
-import java.util.ArrayList;
+import com.example.adobeoflegends.objects.Card;
+
 import java.util.List;
 
 public abstract class Person {

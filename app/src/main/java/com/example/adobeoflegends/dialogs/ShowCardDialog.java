@@ -16,10 +16,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.adobeoflegends.Card;
+import com.example.adobeoflegends.objects.Card;
 import com.example.adobeoflegends.R;
 
-import static com.example.adobeoflegends.activity.BattleActivity.findCard;
+import static com.example.adobeoflegends.activity.Battle.findCard;
 
 
 public class ShowCardDialog extends DialogFragment {

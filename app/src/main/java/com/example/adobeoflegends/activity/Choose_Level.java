@@ -1,15 +1,10 @@
 package com.example.adobeoflegends.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +13,6 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.adobeoflegends.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Choose_Level extends AppCompatActivity {
     ConstraintLayout main;
@@ -55,8 +47,9 @@ public class Choose_Level extends AppCompatActivity {
             final int finalI = i;
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(Choose_Level.this, BattleActivity.class);
+                    Intent intent = new Intent(Choose_Level.this, Battle.class);
                     intent.putExtra("difficulty", finalI + 1);
+                    intent.putExtra("currentUser", getIntent().getStringExtra("currentUser"));
                     startActivity(intent);
                 }
             });

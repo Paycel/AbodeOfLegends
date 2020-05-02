@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.database.DBHelper;
+import com.example.adobeoflegends.objects.Player;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -43,7 +44,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
     private TextView textPoints;
     private GoogleApiClient googleApiClient;
     private DBHelper dbHelper;
-    private SQLiteDatabase dataBase;
+    public static SQLiteDatabase dataBase;
     private int points;
     private String currentUser;
     private static final int SIGN_IN_CODE = 100;
@@ -70,7 +71,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         Log.d(LOG_TAG, "Rows count = " + dbHelper.getRowsCount(dataBase));
         Log.d(LOG_TAG, "Loaded points = " + dbHelper.getPoints(dataBase, currentUser));
         buttonRandomGame = (Button) findViewById(R.id.btn_RandomGame);
-        buttonLoad = (Button) findViewById(R.id.btn_Load);
+        buttonLoad = (Button) findViewById(R.id.btn_achieve);
         buttonShop = (Button) findViewById(R.id.btn_Shop);
         buttonChooseGame = (Button) findViewById(R.id.btn_ChooseLevel);
         Button buttonRU = (Button) findViewById(R.id.btn_RU);
@@ -83,13 +84,13 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_RandomGame:
-                        Intent newGame = new Intent(Menu.this, BattleActivity.class);
+                        Intent newGame = new Intent(Menu.this, Battle.class);
                         newGame.putExtra("difficulty", 0);
                         newGame.putExtra("currentUser", currentUser);
                         startActivity(newGame);
                         break;
-                    case R.id.btn_Load:
-                        Intent load = new Intent(Menu.this, Load.class);
+                    case R.id.btn_achieve:
+                        Intent load = new Intent(Menu.this, Achievements.class);
                         load.putExtra("currentUser", currentUser);
                         startActivity(load);
                         break;
@@ -199,7 +200,10 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
                 String email = account.getEmail();
                 String name = account.getDisplayName();
                 Log.d(LOG_TAG, "EMAIL = " + email + "\nNAME = " + name);
-                if (dbHelper.getRowsCount(dataBase) == 1) dbHelper.addUser(dataBase, email, dbHelper.getPoints(dataBase, locale));
+                if (dbHelper.getRowsCount(dataBase) == 1) {
+                    dbHelper.addUser(dataBase, email, dbHelper.getPoints(dataBase, locale));
+                    dbHelper.copyBattles(dataBase, locale, email);
+                }
                 else if (dbHelper.getPoints(dataBase, email) == -1) dbHelper.addUser(dataBase, email, 0);
                 currentUser = email;
                 showPoints(currentUser);

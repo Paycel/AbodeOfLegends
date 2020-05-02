@@ -9,21 +9,20 @@
         android:supportsRtl="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity android:name=".activity.Achievements">
+        </activity>
         <activity
             android:name=".activity.Menu"
         ></activity>
 
-        <activity android:name=".activity.Load"
-            />
         <activity
-            android:name=".activity.BattleActivity"
+            android:name=".activity.Battle"
         ></activity>
         <activity android:name=".activity.Choose_Level"></activity>
 

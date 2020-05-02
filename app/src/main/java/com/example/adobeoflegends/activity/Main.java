@@ -7,7 +7,7 @@ import android.os.Handler;
 
 import com.example.adobeoflegends.R;
 
-public class MainActivity extends Activity {
+public class Main extends Activity {
 
     private final int SPLASH_DISPLAY_LENGTH = 1 * 1000;
 
@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(MainActivity.this, Menu.class);
+                Intent i = new Intent(Main.this, Menu.class);
                 startActivity(i);
                 finish();
             }
