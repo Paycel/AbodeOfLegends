@@ -10,6 +10,7 @@ import java.util.TreeSet;
 public class Player extends Person{
 
     private TreeSet<String> achievements;
+    private List<Card> deck;
 
     Player(int hp, int mp, List<Card>cardList) {
         super(hp, mp, cardList);
@@ -79,10 +80,15 @@ public class Player extends Person{
         achievements.addAll(temp);
     }
 
+    public List<Card> getDeck() {
+        return deck;
+    }
+
+    public void setDeck(List<Card> cards){
+        this.deck = cards;
+    }
 
     public TreeSet<String> getAchievements(){
         return achievements;
     }
-
-
 }

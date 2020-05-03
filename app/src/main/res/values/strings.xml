@@ -31,6 +31,11 @@
     <string name="mp" translatable="false">"MP: "</string>
     <string name="cards">Карт: </string>
     <string name="results">Топ 10</string>
+    <string name="no_points">К сожалению, у вас не хватает на это очков!</string>
+    <string name="upgrade">Улучшить</string>
+    <string name="dialog_title_shop">Улучшение карты</string>
+    <string name="dialog_message_shop1">Это будет стоить вам </string>
+    <string name="dialog_message_shop2"> поинтов</string>
     <string name="stage">"ЭТАП "</string>
     <string name="choose_card">Вы должны выбрать карту для удара!</string>
     <string name="exit_dialog_title">Выход в главное меню</string>

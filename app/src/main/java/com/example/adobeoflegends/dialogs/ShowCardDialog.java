@@ -19,7 +19,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.adobeoflegends.objects.Card;
 import com.example.adobeoflegends.R;
 
-import static com.example.adobeoflegends.activity.Battle.findCard;
+import static com.example.adobeoflegends.activity.BattleActivity.findCard;
 
 
 public class ShowCardDialog extends DialogFragment {

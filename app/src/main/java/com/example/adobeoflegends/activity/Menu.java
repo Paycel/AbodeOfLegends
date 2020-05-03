@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.database.DBHelper;
-import com.example.adobeoflegends.objects.Player;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -68,8 +67,6 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         dbHelper.setPoints(dataBase, currentUser, dbHelper.getPoints(dataBase, currentUser) + points);
         showPoints(currentUser);
         dbHelper.showInfo(dataBase);
-        Log.d(LOG_TAG, "Rows count = " + dbHelper.getRowsCount(dataBase));
-        Log.d(LOG_TAG, "Loaded points = " + dbHelper.getPoints(dataBase, currentUser));
         buttonRandomGame = (Button) findViewById(R.id.btn_RandomGame);
         buttonLoad = (Button) findViewById(R.id.btn_achieve);
         buttonShop = (Button) findViewById(R.id.btn_Shop);
@@ -84,7 +81,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_RandomGame:
-                        Intent newGame = new Intent(Menu.this, Battle.class);
+                        Intent newGame = new Intent(Menu.this, BattleActivity.class);
                         newGame.putExtra("difficulty", 0);
                         newGame.putExtra("currentUser", currentUser);
                         startActivity(newGame);
@@ -95,7 +92,9 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
                         startActivity(load);
                         break;
                     case R.id.btn_Shop:
-                        //TODO Магазин
+                        Intent i1 = new Intent(Menu.this, Shop.class);
+                        i1.putExtra("currentUser", currentUser);
+                        startActivity(i1);
                         break;
                     case R.id.btn_ChooseLevel:
                         Intent i = new Intent(Menu.this, Choose_Level.class);

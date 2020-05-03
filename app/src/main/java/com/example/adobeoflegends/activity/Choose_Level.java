@@ -47,7 +47,7 @@ public class Choose_Level extends AppCompatActivity {
             final int finalI = i;
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Intent intent = new Intent(Choose_Level.this, Battle.class);
+                    Intent intent = new Intent(Choose_Level.this, BattleActivity.class);
                     intent.putExtra("difficulty", finalI + 1);
                     intent.putExtra("currentUser", getIntent().getStringExtra("currentUser"));
                     startActivity(intent);

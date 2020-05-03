@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Battle extends AppCompatActivity implements View.OnClickListener {
+public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
     public static com.example.adobeoflegends.objects.Battle battle;
     private static int points;
     private static int levelPoints;
@@ -142,7 +142,7 @@ public class Battle extends AppCompatActivity implements View.OnClickListener {
         if (difficulty == 0) difficulty = (int) (4 + Math.random() * 8);
         Log.d(LOG_TAG_FIGHT, "DIFF = " + difficulty);
         com.example.adobeoflegends.objects.Battle.setNumsOfCards(difficulty + 4);
-        battle = new com.example.adobeoflegends.objects.Battle();
+        battle = new com.example.adobeoflegends.objects.Battle(getApplicationContext(), currentUser);
         battle.setEnemyHP((int)(battle.getEnemyHP() * (1 + (float)difficulty / 10)));
         battle.setEnemyMP((int)(battle.getEnemyMP() * (1 + (float)difficulty / 10)));
         maxEnemyHP = battle.getEnemyHP();
@@ -250,9 +250,6 @@ public class Battle extends AppCompatActivity implements View.OnClickListener {
 
     private void setCardStats(LinearLayout card){
         ConstraintLayout s_card = firstToSecond(card);
-        // 0 - Пушной - УРОН
-        // 1 - крестьянин - ХП
-        // 2 - Дракон - мана
         ImageView HP = (ImageView) s_card.getChildAt(1);
         Card person = findCard(s_card.getId());
         assert person != null;
@@ -577,7 +574,7 @@ public class Battle extends AppCompatActivity implements View.OnClickListener {
                     deactivateButton(buttonOK);
                     deactivateButton(buttonFACE);
                     moveCount++;
-                    Battle.log.add( "Ход " + ((int) (moveCount + 1) / 2) + ": ");
+                    BattleActivity.log.add( "Ход " + ((int) (moveCount + 1) / 2) + ": ");
                     enemyMove();
                     moveCount++;
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

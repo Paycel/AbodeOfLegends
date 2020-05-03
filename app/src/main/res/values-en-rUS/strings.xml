@@ -50,4 +50,9 @@
     <string name="points">"Points: "</string>
     <string name="results">Top 10</string>
     <string name="stage">"STAGE "</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="dialog_title_shop">Card improvement</string>
+    <string name="dialog_message_shop1">"It will cost you "</string>
+    <string name="dialog_message_shop2">" points"</string>
+    <string name="no_points">Unfortunately, you do not have enough points for this.</string>
 </resources>

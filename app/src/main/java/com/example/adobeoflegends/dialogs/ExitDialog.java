@@ -10,13 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.adobeoflegends.activity.Battle;
+import com.example.adobeoflegends.activity.BattleActivity;
 import com.example.adobeoflegends.activity.Menu;
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.database.DBHelper;
 
-import static com.example.adobeoflegends.activity.Battle.currentUser;
-import static com.example.adobeoflegends.activity.Battle.difficulty;
+import static com.example.adobeoflegends.activity.BattleActivity.currentUser;
+import static com.example.adobeoflegends.activity.BattleActivity.difficulty;
 
 public class ExitDialog extends DialogFragment {
     @NonNull
@@ -33,11 +33,11 @@ public class ExitDialog extends DialogFragment {
         builder.setPositiveButton(btnYes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent i = new Intent(getActivity(), Menu.class);
-                i.putExtra("points", Battle.getPoints());
+                i.putExtra("points", BattleActivity.getPoints());
                 i.putExtra("currentUser", currentUser);
                 DBHelper dbHelper = new DBHelper(getContext());
                 dbHelper.addACH(dbHelper.getWritableDatabase(), currentUser,
-                        getResources().getText(R.string.stage).toString() + difficulty + " " + Battle.getLevelPoints());
+                        getResources().getText(R.string.stage).toString() + difficulty + " " + BattleActivity.getLevelPoints());
                 startActivity(i);
             }
         });

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.adobeoflegends.R;
-import com.example.adobeoflegends.activity.Battle;
+import com.example.adobeoflegends.activity.BattleActivity;
 
 public class Info extends DialogFragment {
     @Override
@@ -24,7 +24,7 @@ public class Info extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         Info_Second info_second = new Info_Second(false);
                         dismiss();
-                        info_second.show(Battle.fragmentManager, "info_second");
+                        info_second.show(BattleActivity.fragmentManager, "info_second");
                     }
                 })
                 .setNeutralButton(getResources().getText(R.string.journal).toString(), new DialogInterface.OnClickListener() {
@@ -32,7 +32,7 @@ public class Info extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Info_Second info_second = new Info_Second(true);
                         dismiss();
-                        info_second.show(Battle.fragmentManager, "info_second_dialog");
+                        info_second.show(BattleActivity.fragmentManager, "info_second_dialog");
                     }
                 });
         return builder.create();

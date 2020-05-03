@@ -7,24 +7,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.adobeoflegends.objects.Card;
 import com.example.adobeoflegends.objects.Player;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.TreeSet;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "GameTable";
     private static final String TABLE_COLUMN_ID = "ID";
     private static final String TABLE_COLUMN_EMAIL = "EMAIL";
     private static final String TABLE_COLUMN_POINTS = "POINTS";
-    private static final String TABLE_COLUMN_ACH = "ACH";
+    private static final String TABLE_COLUMN_OBJECT = "OBJECT";
     private static final String DATABASE_NAME = "MY_DB";
     private static final String LOG_TAG = "MY_LOGS";
 
@@ -37,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " ("
                 + TABLE_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + TABLE_COLUMN_EMAIL + " TEXT,"
-                + TABLE_COLUMN_ACH + " TEXT,"
+                + TABLE_COLUMN_OBJECT + " TEXT,"
                 + TABLE_COLUMN_POINTS + " INTEGER);");
     }
 
@@ -52,12 +48,34 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(TABLE_COLUMN_EMAIL, email);
         cv.put(TABLE_COLUMN_POINTS, points);
         Player player = new Player();
+        player.setDeck(new Card().getNewDeck());
+        player.setHealthPoints(20);
+        player.setManaPoints(20);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         String temp = gson.toJson(player);
-        cv.put(TABLE_COLUMN_ACH, temp);
+        cv.put(TABLE_COLUMN_OBJECT, temp);
         long rowID = db.insert(TABLE_NAME, null, cv);
         Log.d(LOG_TAG, "Inserted, ID = " + rowID);
+    }
+
+    public void updateCard(SQLiteDatabase db, String email, String name, int dHP, int dDP, int cost){
+        setPoints(db, email, getPoints(db, email) - cost);
+        Player player = getPlayer(db, email);
+        List<Card> list = player.getDeck();
+        for (Card card: list)
+            if (card.getName().equals(name)){
+                card.setHealthPoints(card.getHealthPoints() + dHP);
+                card.setDamagePoints(card.getDamagePoints() + dDP);
+                break;
+            }
+        player.setDeck(list);
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        String temp = gson.toJson(player);
+        ContentValues cv = new ContentValues();
+        cv.put(TABLE_COLUMN_OBJECT, temp);
+        db.update(TABLE_NAME, cv, TABLE_COLUMN_EMAIL + "='" + email + "'", null);
     }
 
     public int getPoints(SQLiteDatabase db, String email) {
@@ -90,7 +108,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Gson gson = builder.create();
         String object = gson.toJson(player);
         ContentValues cv = new ContentValues();
-        cv.put(TABLE_COLUMN_ACH, object);
+        cv.put(TABLE_COLUMN_OBJECT, object);
         db.update(TABLE_NAME, cv,TABLE_COLUMN_EMAIL + "='" + email + "'", null);
     }
 
@@ -103,12 +121,12 @@ public class DBHelper extends SQLiteOpenHelper {
         Gson gson = builder.create();
         String object = gson.toJson(player_to);
         ContentValues cv = new ContentValues();
-        cv.put(TABLE_COLUMN_ACH, object);
+        cv.put(TABLE_COLUMN_OBJECT, object);
         db.update(TABLE_NAME, cv,TABLE_COLUMN_EMAIL + "='" + to + "'", null);
     }
 
     public Player getPlayer(SQLiteDatabase db, String email){
-        String query = "SELECT " + TABLE_COLUMN_ACH + " FROM " + TABLE_NAME + " WHERE " + TABLE_COLUMN_EMAIL + "='" + email + "';";
+        String query = "SELECT " + TABLE_COLUMN_OBJECT + " FROM " + TABLE_NAME + " WHERE " + TABLE_COLUMN_EMAIL + "='" + email + "';";
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         String object = c.getString(0);
@@ -123,7 +141,7 @@ public class DBHelper extends SQLiteOpenHelper {
             int idColIndex = c.getColumnIndex(TABLE_COLUMN_ID);
             int emailColIndex = c.getColumnIndex(TABLE_COLUMN_EMAIL);
             int pointsColIndex = c.getColumnIndex(TABLE_COLUMN_POINTS);
-            int objectIndex = c.getColumnIndex(TABLE_COLUMN_ACH);
+            int objectIndex = c.getColumnIndex(TABLE_COLUMN_OBJECT);
             do {
                 String _email = c.getString(emailColIndex);
                 int points = c.getInt(pointsColIndex);

@@ -2,6 +2,9 @@ package com.example.adobeoflegends.objects;
 
 import com.example.adobeoflegends.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Card {
     private int healthPoints;
     private int damagePoints;
@@ -11,29 +14,71 @@ public class Card {
     private boolean active;
     private boolean isTapped;
     private int cost;
+    private String[] names = {
+            "Дракон",
+            "Крестьянин",
+            "Вампир",
+            "Волшебник"};
+    private int[] dps = {8, 4, 7, 3};
+    private int[] hps = {5, 4, 7, 9};
+    private int[] costs = {9, 3, 7, 5};
+    private int[] ids = {R.drawable.dragon, R.drawable.peasant, R.drawable.vampire, R.drawable.wizard};
 
     public Card(){
-        int hp =  (int)(Math.random()*10 + 1);
-        int dp =  (int)(Math.random()*10 + 1);
-        int cost = (int)((Math.random()*10 + 1));
-        String names[] = {
-                "Дракон",
-                "Крестьянин",
-                "Вампир",
-                "Волшебник"};
         int num = (int) (Math.random()*names.length);
-        this.healthPoints = hp;
-        this.damagePoints = dp;
+        this.healthPoints = hps[num];
+        this.damagePoints = dps[num];
         this.name = names[num];
-        this.cost = cost;
-        switch (num){
-            case 0: this.pictureID = R.drawable.dragon; break;
-            case 1: this.pictureID = R.drawable.peasant; break;
-            case 2: this.pictureID = R.drawable.vampire; break;
-            case 3: this.pictureID = R.drawable.wizard; break;
-        }
+        this.cost = costs[num];
+        this.pictureID = ids[num];
         active = false;
         isTapped = false;
+    }
+
+    public int getCardsCost(String name, int hp, int dp){
+        int prev_hp = 0, prev_dp = 0;
+        for (int i = 0; i < names.length; i++)
+            if (name.equals(names[i])){
+                prev_dp = dps[i];
+                prev_hp = hps[i];
+                break;
+            }
+        return 20 * ((hp - prev_hp) + (dp - prev_dp) + 1);
+    }
+
+    public int getDhp(String name, int hp){
+        int prev_hp = 0;
+        for (int i = 0; i < names.length; i++)
+            if (name.equals(names[i])){
+                prev_hp = hps[i];
+                break;
+            }
+        return hp - prev_hp + 1;
+    }
+
+    public int getDdp(String name, int dp){
+        int prev_dp = 0;
+        for (int i = 0; i < names.length; i++)
+            if (name.equals(names[i])){
+                prev_dp = dps[i];
+                break;
+            }
+        return dp - prev_dp + 1;
+    }
+
+    public List<Card> getNewDeck(){
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < names.length; i++){
+            Card card = new Card();
+            int hp = hps[i], dp = dps[i], cost = costs[i], id = ids[i];
+            card.setDamagePoints(dp);
+            card.setHealthPoints(hp);
+            card.setCost(cost);
+            card.setPictureID(id);
+            card.setName(names[i]);
+            cards.add(card);
+        }
+        return cards;
     }
 
     public int getHealthPoints() {

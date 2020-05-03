@@ -15,15 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Achievements">
-        </activity>
-        <activity
-            android:name=".activity.Menu"
-        ></activity>
-
-        <activity
-            android:name=".activity.Battle"
-        ></activity>
+        <activity android:name=".activity.Achievements"></activity>
+        <activity android:name=".activity.Menu"></activity>
+        <activity android:name=".activity.Shop"></activity>
+        <activity android:name=".activity.BattleActivity"></activity>
         <activity android:name=".activity.Choose_Level"></activity>
 
     </application>
