@@ -66,6 +66,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
     public static final String LOG_TAG_FIGHT = "Fight";
     public static final String LOG_TAG_SIZE = "Size";
     public static final String LOG_TAG_DELAY = "Delay";
+    public static final String LOG_TAG_TEMP = "temp";
     private View.OnLongClickListener onLongClickListener;
     private int api;
     public static ArrayList<String> log;
@@ -363,6 +364,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                 rndEnemy = -1;
                 for (int i = 0; i < enemyTable.getChildCount(); i++){
                     enemy = (LinearLayout) enemyTable.getChildAt(i);
+                    Log.d(LOG_TAG_TEMP, "enemy #" + i + " is " + isActiveCard(enemy));
                     if (isActiveCard(enemy)){
                         allNotActive = false;
                         delayMS = 2000;
@@ -389,7 +391,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         @Override
                         public void run() {
                             log.add("Вы (HP: " + battle.getPlayerHP() + ") получаете " + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints() +
-                                    " урона от карты " + findCard(firstToSecond(finalEnemy).getId()).getName() +
+                                    " урона от карты " + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getName() +
                                     " (" + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints() + ", " +
                                     Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getHealthPoints() + ")");
                             battle.setPlayerHP(battle.getPlayerHP() - Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints());

@@ -3,6 +3,7 @@ package com.example.adobeoflegends.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -10,7 +11,10 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.activity.BattleActivity;
+import com.example.adobeoflegends.activity.Shop;
 import com.example.adobeoflegends.database.DBHelper;
+
+import java.util.Objects;
 
 public class ShopDialog extends DialogFragment {
     private int cost;
@@ -39,7 +43,7 @@ public class ShopDialog extends DialogFragment {
                             Toast.makeText(getContext(), getResources().getText(R.string.no_points).toString(), Toast.LENGTH_SHORT).show();
                             dismiss();
                         } else {
-                            // TODO запрос в БД и обновление поинтов с статами на экране
+                            // TODO обновление поинтов со статами на экране
                             DBHelper dbHelper = new DBHelper(getContext());
                             dbHelper.updateCard(dbHelper.getWritableDatabase(), email, name, dp, hp, cost);
                         }
@@ -51,5 +55,11 @@ public class ShopDialog extends DialogFragment {
                     }
                 });
         return builder.create();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Objects.requireNonNull(getActivity()).recreate();
     }
 }

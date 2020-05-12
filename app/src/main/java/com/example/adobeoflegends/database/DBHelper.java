@@ -132,6 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String object = c.getString(0);
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
+        c.close();
         return gson.fromJson(object, Player.class);
     }
 
@@ -145,7 +146,7 @@ public class DBHelper extends SQLiteOpenHelper {
             do {
                 String _email = c.getString(emailColIndex);
                 int points = c.getInt(pointsColIndex);
-                Log.d(LOG_TAG, "ID = " + c.getInt(idColIndex) + ", email = " + _email + ", points = " + points + ", object = " + c.getString(objectIndex));
+                // Log.d(LOG_TAG, "ID = " + c.getInt(idColIndex) + ", email = " + _email + ", points = " + points + ", object = " + c.getString(objectIndex));
             } while (c.moveToNext());
         }
         c.close();

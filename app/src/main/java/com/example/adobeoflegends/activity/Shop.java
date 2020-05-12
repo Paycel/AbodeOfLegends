@@ -1,8 +1,10 @@
 package com.example.adobeoflegends.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -37,7 +39,15 @@ public class Shop extends AppCompatActivity {
         points.setText(getResources().getText(R.string.points).toString() + dbHelper.getPoints(dbHelper.getWritableDatabase(), currentUser));
         GridView table = (GridView) findViewById(R.id.table);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        ShopAdapter shopAdapter = new ShopAdapter(fragmentManager, getApplicationContext(), player, currentUser);
+        ShopAdapter shopAdapter = new ShopAdapter(fragmentManager, getApplicationContext(), player, currentUser, getResources().getText(R.string.upgrade).toString());
         table.setAdapter(shopAdapter);
+        Button btn = (Button) findViewById(R.id.btn_back_shop);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Shop.this, Menu.class);
+                startActivity(i);
+            }
+        });
     }
 }
