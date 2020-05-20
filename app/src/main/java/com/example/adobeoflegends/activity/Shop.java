@@ -6,22 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.gridlayout.widget.GridLayout;
 
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.adapter.ShopAdapter;
 import com.example.adobeoflegends.database.DBHelper;
-import com.example.adobeoflegends.objects.Card;
 import com.example.adobeoflegends.objects.Player;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Shop extends AppCompatActivity {
@@ -49,5 +44,10 @@ public class Shop extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

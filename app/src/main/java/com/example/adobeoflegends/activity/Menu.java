@@ -2,7 +2,6 @@ package com.example.adobeoflegends.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -48,7 +47,6 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
     private String currentUser;
     private static final int SIGN_IN_CODE = 100;
     private static final String LOG_TAG = "MY_LOGS";
-    private SharedPreferences sharedPreferences;
     private static final String locale = "Locale";
 
     @Override
@@ -58,7 +56,6 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         setContentView(R.layout.activity_main_menu);
         dbHelper = new DBHelper(this);
         dataBase = dbHelper.getWritableDatabase();
-        sharedPreferences = getPreferences(MODE_PRIVATE);
         textPoints = (TextView) findViewById(R.id.points);
         points = getIntent().getIntExtra("points", 0);
         currentUser = getIntent().getStringExtra("currentUser");
@@ -85,21 +82,25 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
                         newGame.putExtra("difficulty", 0);
                         newGame.putExtra("currentUser", currentUser);
                         startActivity(newGame);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         break;
                     case R.id.btn_achieve:
                         Intent load = new Intent(Menu.this, Achievements.class);
                         load.putExtra("currentUser", currentUser);
                         startActivity(load);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         break;
                     case R.id.btn_Shop:
                         Intent i1 = new Intent(Menu.this, Shop.class);
                         i1.putExtra("currentUser", currentUser);
                         startActivity(i1);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         break;
                     case R.id.btn_ChooseLevel:
                         Intent i = new Intent(Menu.this, Choose_Level.class);
                         i.putExtra("currentUser", currentUser);
                         startActivity(i);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         break;
                     case R.id.btn_ENG:
                         Locale locale = new Locale("en");
@@ -260,5 +261,11 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.objects.Player;
 
-import java.util.Map;
 import java.util.TreeSet;
 
 public class AchievementsAdapter extends BaseAdapter {

@@ -1,11 +1,8 @@
 package com.example.adobeoflegends.activity;
 
-import android.animation.Animator;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.ViewAnimationUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -36,6 +33,7 @@ public class Main extends AppCompatActivity {
             public void run() {
                 Intent i = new Intent(Main.this, Menu.class);
                 startActivity(i);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }
         }, SPLASH_DISPLAY_LENGTH);

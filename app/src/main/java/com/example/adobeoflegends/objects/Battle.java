@@ -2,8 +2,6 @@ package com.example.adobeoflegends.objects;
 
 import android.content.Context;
 
-import com.example.adobeoflegends.R;
-import com.example.adobeoflegends.activity.BattleActivity;
 import com.example.adobeoflegends.activity.Menu;
 import com.example.adobeoflegends.database.DBHelper;
 

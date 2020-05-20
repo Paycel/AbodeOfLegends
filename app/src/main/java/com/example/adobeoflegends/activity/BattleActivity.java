@@ -32,8 +32,6 @@ import com.example.adobeoflegends.dialogs.EndGameDialog;
 import com.example.adobeoflegends.dialogs.ExitDialog;
 import com.example.adobeoflegends.dialogs.Info;
 import com.example.adobeoflegends.dialogs.ShowCardDialog;
-import com.example.adobeoflegends.objects.Enemy;
-import com.example.adobeoflegends.objects.Player;
 
 import java.util.ArrayList;
 import java.util.List;

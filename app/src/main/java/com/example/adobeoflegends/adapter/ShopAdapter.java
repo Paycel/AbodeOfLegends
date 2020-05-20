@@ -1,25 +1,19 @@
 package com.example.adobeoflegends.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.adobeoflegends.R;
-import com.example.adobeoflegends.activity.BattleActivity;
 import com.example.adobeoflegends.database.DBHelper;
 import com.example.adobeoflegends.dialogs.ShopDialog;
 import com.example.adobeoflegends.objects.Card;

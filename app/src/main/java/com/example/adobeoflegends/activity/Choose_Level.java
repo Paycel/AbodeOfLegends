@@ -51,6 +51,7 @@ public class Choose_Level extends AppCompatActivity {
                     intent.putExtra("difficulty", finalI + 1);
                     intent.putExtra("currentUser", getIntent().getStringExtra("currentUser"));
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }
             });
             main.addView(btn);

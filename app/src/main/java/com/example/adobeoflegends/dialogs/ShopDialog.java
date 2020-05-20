@@ -3,15 +3,12 @@ package com.example.adobeoflegends.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
 import com.example.adobeoflegends.R;
-import com.example.adobeoflegends.activity.BattleActivity;
-import com.example.adobeoflegends.activity.Shop;
 import com.example.adobeoflegends.database.DBHelper;
 
 import java.util.Objects;
