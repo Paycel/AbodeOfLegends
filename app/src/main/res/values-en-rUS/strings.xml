@@ -35,15 +35,9 @@
     <string name="info_1" translatable="false">You have health and mana points, they are worth watching. For mana points, cards are thrown onto the table. If health drops to 0, you will die!</string>
     <string name="info_2">Before you is your deck, your table, the opponent’s table and his deck.</string>
     <string name="info_3">All the action takes place on the table, cards are thrown out from the deck.</string>
-    <string name="info_4">Each card has damage, health and its value. Damage is located at the bottom left, health is at the bottom right, and the cost (in mana points) is at the top right.</string>
-    <string name="info_5">To throw a card on the table, click on the card from your deck and on the checkmark.</string>
+    <string name="info_4">The more health an opponent has, the more he regenerates it for himself. You only regenerate yourself 5 mana each turn.</string>
+    <string name="info_5">Each card has damage, health and its value. Damage is located at the bottom left, health is at the bottom right, and the cost (in mana points) is at the top right.</string>
     <string name="info_6">Once you have done this, it becomes inactive, it can no longer be selected until the next move.</string>
-    <string name="info_7">When you press the MOVE button, the opponent comes off and your cards unfreeze. Also, if you did not notice what the enemy did, there is an information button, as you got here, there is a Move Log.</string>
-    <string name="info_8">How to beat?</string>
-    <string name="info_9">First you need to select a card from the table to go to it, now either:</string>
-    <string name="info_10">1) You do not select a card from the opponent’s table and click on the Strike button - this is a button with swords, then you will hit the opponent specifically.</string>
-    <string name="info_11">2) You select a card from the opponent’s table and click on the Blow button - then your card beats the opponent’s card, which will definitely answer you!</string>
-    <string name="info_12">"That's all, good luck!"</string>
     <string name="journal_start">"*This is your battle log.*"</string>
     <string name="sign_in">Sign in</string>
     <string name="no_mana">Not enough of mana!</string>
@@ -74,4 +68,11 @@
     <string name="card_name_wizard">Wizard</string>
     <string name="card_name_archer">Archer</string>
     <string name="card_name_vampire">Vampire</string>
+    <string name="info_7">Once you have done this, it becomes inactive, it can no longer be selected until the next move.</string>
+    <string name="info_8">When you press the MOVE button, the enemy comes off and your cards unfreeze. Also, if you did not notice what the enemy did, there is an information button, as you got here, there is a Movement Log.</string>
+    <string name="info_9">How to beat?</string>
+    <string name="info_10">First you need to select a card from the table to go to it, now either:</string>
+    <string name="info_11">1) You do not select a card from the opponent’s table and click on the Blow button - this is a button with swords, then you will hit the opponent specifically.</string>
+    <string name="info_12">2) You select a card from the opponent’s table and click on the Blow button - then your card beats the opponent’s card, which will definitely answer you!</string>
+    <string name="info_13">That\'s all, good luck!</string>
 </resources>

@@ -37,7 +37,7 @@ public class Info_Second extends DialogFragment {
             textView.setText(textView.getText().toString() + BattleActivity.log.get(i) + "\n");
         }
         else
-            for (int i = 0; i < 12; i++){
+            for (int i = 0; i < 13; i++){
                 switch (i){
                     case 0: textView.setText(textView.getText().toString() + getResources().getText(R.string.info_1).toString() + "\n");break;
                     case 1: textView.setText(textView.getText().toString() + getResources().getText(R.string.info_2).toString() + "\n");break;
@@ -51,6 +51,7 @@ public class Info_Second extends DialogFragment {
                     case 9: textView.setText(textView.getText().toString() + getResources().getText(R.string.info_10).toString() + "\n");break;
                     case 10: textView.setText(textView.getText().toString() + getResources().getText(R.string.info_11).toString() + "\n");break;
                     case 11: textView.setText(textView.getText().toString() + getResources().getText(R.string.info_12).toString() + "\n");break;
+                    case 12: textView.setText(textView.getText().toString() + getResources().getText(R.string.info_13).toString() + "\n");break;
                 }
             }
         textView.setOnClickListener(new View.OnClickListener() {
