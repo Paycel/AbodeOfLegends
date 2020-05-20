@@ -36,14 +36,13 @@ public class ShopDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getResources().getText(R.string.dialog_title_shop).toString());
-        builder.setMessage(getResources().getText(R.string.dialog_message_shop1).toString() + cost + getResources().getText(R.string.dialog_message_shop2).toString())
+        builder.setMessage(getResources().getText(R.string.dialog_message_shop1).toString() + " " + cost + " " + getResources().getText(R.string.dialog_message_shop2).toString())
                 .setPositiveButton(getResources().getText(R.string.yes).toString(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (points < cost) {
                             Toast.makeText(getContext(), getResources().getText(R.string.no_points).toString(), Toast.LENGTH_SHORT).show();
                             dismiss();
                         } else {
-                            // TODO обновление поинтов со статами на экране
                             DBHelper dbHelper = new DBHelper(getContext());
                             dbHelper.updateCard(dbHelper.getWritableDatabase(), email, name, dp, hp, cost);
                         }

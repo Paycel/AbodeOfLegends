@@ -1,5 +1,7 @@
 package com.example.adobeoflegends.objects;
 
+import android.content.Context;
+
 import com.example.adobeoflegends.R;
 
 import java.util.ArrayList;
@@ -14,20 +16,24 @@ public class Card {
     private boolean active;
     private boolean isTapped;
     private int cost;
-    private String[] names = {
-            "Дракон",
-            "Крестьянин",
-            "Вампир",
-            "Волшебник"};
-    private int[] dps = {8, 4, 7, 3};
-    private int[] hps = {5, 4, 7, 9};
-    private int[] costs = {9, 3, 7, 5};
-    private int[] ids = {R.drawable.dragon, R.drawable.peasant, R.drawable.vampire, R.drawable.wizard};
+    private String[] names;
+    private int[] dps = {4, 6, 5, 7, 2};
+    private int[] hps = {4, 2, 6, 7, 6};
+    private int[] costs = {5, 7, 7, 7, 6};
+    private int[] ids = {R.drawable.peasant, R.drawable.archer, R.drawable.swordsman, R.drawable.vampire, R.drawable.wizard};
 
-    public Card(){
+    public Card(Context context){
+        this.names = new String[]{
+            context.getResources().getText(R.string.card_name_peasant).toString(),
+            context.getResources().getText(R.string.card_name_archer).toString(),
+            context.getResources().getText(R.string.card_name_swordsman).toString(),
+            context.getResources().getText(R.string.card_name_vampire).toString(),
+            context.getResources().getText(R.string.card_name_wizard).toString()
+        };
         int num = (int) (Math.random()*names.length);
         this.healthPoints = hps[num];
         this.damagePoints = dps[num];
+
         this.name = names[num];
         this.cost = costs[num];
         this.pictureID = ids[num];
@@ -66,10 +72,10 @@ public class Card {
         return dp - prev_dp + 1;
     }
 
-    public List<Card> getNewDeck(){
+    public List<Card> getNewDeck(Context context){
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < names.length; i++){
-            Card card = new Card();
+            Card card = new Card(context);
             int hp = hps[i], dp = dps[i], cost = costs[i], id = ids[i];
             card.setDamagePoints(dp);
             card.setHealthPoints(hp);
@@ -143,5 +149,23 @@ public class Card {
 
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public int[] getIds() {
+        return ids;
+    }
+
+    public String[] getNames() {
+        return names;
+    }
+
+    public void setNames(String[] names) {
+        this.names = names;
+        for (int i = 0; i < names.length; i++) {
+            if (cost == costs[i] && damagePoints == dps[i] && healthPoints == hps[i]) {
+                name = names[i];
+                break;
+            }
+        }
     }
 }

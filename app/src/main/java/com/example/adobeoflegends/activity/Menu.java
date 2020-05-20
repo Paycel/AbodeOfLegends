@@ -63,7 +63,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         points = getIntent().getIntExtra("points", 0);
         currentUser = getIntent().getStringExtra("currentUser");
         if (currentUser == null) currentUser = locale;
-        if (dbHelper.getPoints(dataBase, locale) == -1) dbHelper.addUser(dataBase, locale, 0);
+        if (dbHelper.getPoints(dataBase, locale) == -1) dbHelper.addUser(dataBase, locale, 0, getApplicationContext());
         dbHelper.setPoints(dataBase, currentUser, dbHelper.getPoints(dataBase, currentUser) + points);
         showPoints(currentUser);
         dbHelper.showInfo(dataBase);
@@ -152,7 +152,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
     @SuppressLint("SetTextI18n")
     void showPoints(String email){
         Log.d(LOG_TAG, "Current user = " + currentUser);
-        if (dbHelper.getPoints(dataBase, email) == -1) dbHelper.addUser(dataBase, email, 0);
+        if (dbHelper.getPoints(dataBase, email) == -1) dbHelper.addUser(dataBase, email, 0, getApplicationContext());
         textPoints.setText(getResources().getText(R.string.points).toString() + dbHelper.getPoints(dataBase, email));
     }
 
@@ -200,10 +200,10 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
                 String name = account.getDisplayName();
                 Log.d(LOG_TAG, "EMAIL = " + email + "\nNAME = " + name);
                 if (dbHelper.getRowsCount(dataBase) == 1) {
-                    dbHelper.addUser(dataBase, email, dbHelper.getPoints(dataBase, locale));
+                    dbHelper.addUser(dataBase, email, dbHelper.getPoints(dataBase, locale), getApplicationContext());
                     dbHelper.copyBattles(dataBase, locale, email);
                 }
-                else if (dbHelper.getPoints(dataBase, email) == -1) dbHelper.addUser(dataBase, email, 0);
+                else if (dbHelper.getPoints(dataBase, email) == -1) dbHelper.addUser(dataBase, email, 0, getApplicationContext());
                 currentUser = email;
                 showPoints(currentUser);
                 points = dbHelper.getPoints(dataBase, email);

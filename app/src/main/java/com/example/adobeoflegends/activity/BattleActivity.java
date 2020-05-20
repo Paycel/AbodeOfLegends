@@ -32,12 +32,15 @@ import com.example.adobeoflegends.dialogs.EndGameDialog;
 import com.example.adobeoflegends.dialogs.ExitDialog;
 import com.example.adobeoflegends.dialogs.Info;
 import com.example.adobeoflegends.dialogs.ShowCardDialog;
+import com.example.adobeoflegends.objects.Enemy;
+import com.example.adobeoflegends.objects.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class BattleActivity extends AppCompatActivity implements View.OnClickListener {
+    @SuppressLint("StaticFieldLeak")
     public static com.example.adobeoflegends.objects.Battle battle;
     private static int points;
     private static int levelPoints;
@@ -143,7 +146,20 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         if (difficulty == 0) difficulty = (int) (4 + Math.random() * 8);
         Log.d(LOG_TAG_FIGHT, "DIFF = " + difficulty);
         com.example.adobeoflegends.objects.Battle.setNumsOfCards(difficulty + 4);
+        String[] names = new String[]{
+                getResources().getText(R.string.card_name_peasant).toString(),
+                getResources().getText(R.string.card_name_archer).toString(),
+                getResources().getText(R.string.card_name_swordsman).toString(),
+                getResources().getText(R.string.card_name_vampire).toString(),
+                getResources().getText(R.string.card_name_wizard).toString()
+        };
         battle = new com.example.adobeoflegends.objects.Battle(getApplicationContext(), currentUser);
+        List<Card> temp = new ArrayList<>(battle.getPlayer().getCardList());
+        for (Card card: temp) card.setNames(names);
+        battle.getPlayer().setCardList(temp);
+        temp = new ArrayList<>(battle.getEnemy().getCardList());
+        for (Card card: temp) card.setNames(names);
+        battle.getEnemy().setCardList(temp);
         battle.setEnemyHP((int)(battle.getEnemyHP() * (1 + (float)difficulty / 10)));
         battle.setEnemyMP((int)(battle.getEnemyMP() * (1 + (float)difficulty / 10)));
         maxEnemyHP = battle.getEnemyHP();
@@ -316,20 +332,31 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
         if (cardEnemy == null) return;
         int idPlayer = firstToSecond(cardPlayer).getId();
         int idEnemy = firstToSecond(cardEnemy).getId();
+        Card player = findCard(firstToSecond(cardPlayer).getId());
+        Card enemy = findCard(firstToSecond(cardEnemy).getId());
+        int e_hp = enemy.getHealthPoints();
+        int p_hp = player.getHealthPoints();
         int result = battle.fight(Objects.requireNonNull(findCard(idPlayer)), Objects.requireNonNull(findCard(idEnemy)));
         if (result == 2){ // победа игрока
             points += 3;
             levelPoints += 3;
             battle.getEnemy().getCardList().remove(findCard(firstToSecond(cardEnemy).getId()));
+            log.add(getResources().getText(R.string.your_card).toString() + " " + player.getName() + " (" + player.getDamagePoints() + ", " + p_hp + ")" + " " +
+                    getResources().getText(R.string.killed).toString()+ " " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp +")");
             deleteCard(cardEnemy);
             setCardStats(cardPlayer);
         } else if (result == 1){ // победа врага
             battle.getPlayer().getCardList().remove(findCard(firstToSecond(cardPlayer).getId()));
+            BattleActivity.log.add(getResources().getText(R.string.your_card).toString()+ " " + player.getName() + " (" + player.getDamagePoints() + ", " + p_hp + ")" +
+                    getResources().getText(R.string.dead_from).toString()+ " " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp + ")");
             deleteCard(cardPlayer);
             setCardStats(cardEnemy);
         } else if (result == 0){
             points += 2;
             levelPoints += 2;
+            BattleActivity.log.add(getResources().getText(R.string.your_card).toString()+ " " + player.getName() + " (" + player.getDamagePoints() + ", " + p_hp + ")" +
+                    getResources().getText(R.string.deal_damage).toString()+ " " + player.getDamagePoints() + " " + getResources().getText(R.string.damage_log).toString()+ " " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp +
+                    ")" + getResources().getText(R.string.n_lose).toString() + " " + (p_hp - player.getHealthPoints()) + " " + getResources().getText(R.string.health_).toString());
            setCardStats(cardEnemy);
            setCardStats(cardPlayer);
         } else {
@@ -337,6 +364,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
             levelPoints += 1;
             battle.getPlayer().getCardList().remove(findCard(firstToSecond(cardPlayer).getId()));
             battle.getEnemy().getCardList().remove(findCard(firstToSecond(cardEnemy).getId()));
+            log.add(getResources().getText(R.string.your_card).toString() + " " + player.getName() + " (" + player.getDamagePoints() + ", " + p_hp + ")" +
+                    getResources().getText(R.string.dead_from).toString() + " " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp + "), " +
+                    getResources().getText(R.string.card_answer_dead).toString());
             deleteCard(cardEnemy);
             deleteCard(cardPlayer);
         }
@@ -390,8 +420,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            log.add("Вы (HP: " + battle.getPlayerHP() + ") получаете " + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints() +
-                                    " урона от карты " + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getName() +
+                            log.add(getResources ().getText(R.string.you).toString() + " (HP: " + battle.getPlayerHP() + ") " + getResources().getText(R.string.gets_).toString() + " " + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints() +
+                                    " " + getResources().getText(R.string.damage_from_card).toString() + " " + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getName() +
                                     " (" + Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints() + ", " +
                                     Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getHealthPoints() + ")");
                             battle.setPlayerHP(battle.getPlayerHP() - Objects.requireNonNull(findCard(firstToSecond(finalEnemy).getId())).getDamagePoints());
@@ -422,7 +452,9 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }, finalDelayMS);
                 }
-                setActiveCard((LinearLayout) enemyTable.getChildAt(enemyTable.getChildCount() - 1));
+                for (int i = 0; i < enemyTable.getChildCount(); i++){
+                    setActiveCard((LinearLayout) enemyTable.getChildAt(i));
+                }
 
             }
         }, 1000);
@@ -466,7 +498,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
 
     private boolean EnoughMP(LinearLayout card){
         if (card == null) return false;
-        if (findCard(firstToSecond(card).getId()).getCost() > battle.getPlayerMP()){
+        if (Objects.requireNonNull(findCard(firstToSecond(card).getId())).getCost() > battle.getPlayerMP()){
             Toast.makeText(this, getResources().getText(R.string.no_mana).toString(), Toast.LENGTH_SHORT).show();
             imagePress(card, true, 200);
             return false;
@@ -544,8 +576,8 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                         Toast.makeText(this, getResources().getText(R.string.choose_card).toString(), Toast.LENGTH_SHORT).show();
                     } else {
                         if (enemyCard == null){
-                            log.add("Противник (HP: " + battle.getEnemyHP() + ") получает " + Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getDamagePoints() +
-                                    " урона от вашей карты " + Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getName() +
+                            log.add(getResources().getText(R.string.enemy).toString() + " (HP: " + battle.getEnemyHP() + ") " + getResources().getText(R.string.gets) + " " + Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getDamagePoints() +
+                                    " " + getResources().getText(R.string.damage_from_your_card).toString() + " " + Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getName() +
                                     " (" + Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getDamagePoints() + ", " +
                                     Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getHealthPoints() + ")");
                             battle.setEnemyHP(battle.getEnemyHP() - Objects.requireNonNull(findCard(firstToSecond(playerCard).getId())).getDamagePoints());
@@ -576,7 +608,7 @@ public class BattleActivity extends AppCompatActivity implements View.OnClickLis
                     deactivateButton(buttonOK);
                     deactivateButton(buttonFACE);
                     moveCount++;
-                    BattleActivity.log.add( "Ход " + ((int) (moveCount + 1) / 2) + ": ");
+                    BattleActivity.log.add( " " + getResources().getText(R.string.next_move).toString() + " " + ((int) (moveCount + 1) / 2) + ": ");
                     enemyMove();
                     moveCount++;
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

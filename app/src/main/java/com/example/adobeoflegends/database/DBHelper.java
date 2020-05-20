@@ -43,12 +43,12 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addUser(SQLiteDatabase db, String email, int points){
+    public void addUser(SQLiteDatabase db, String email, int points, Context context){
         ContentValues cv = new ContentValues();
         cv.put(TABLE_COLUMN_EMAIL, email);
         cv.put(TABLE_COLUMN_POINTS, points);
         Player player = new Player();
-        player.setDeck(new Card().getNewDeck());
+        player.setDeck(new Card(context).getNewDeck(context));
         player.setHealthPoints(20);
         player.setManaPoints(20);
         GsonBuilder builder = new GsonBuilder();
@@ -62,14 +62,19 @@ public class DBHelper extends SQLiteOpenHelper {
     public void updateCard(SQLiteDatabase db, String email, String name, int dHP, int dDP, int cost){
         setPoints(db, email, getPoints(db, email) - cost);
         Player player = getPlayer(db, email);
-        List<Card> list = player.getDeck();
-        for (Card card: list)
-            if (card.getName().equals(name)){
-                card.setHealthPoints(card.getHealthPoints() + dHP);
-                card.setDamagePoints(card.getDamagePoints() + dDP);
-                break;
-            }
-        player.setDeck(list);
+        if (name.isEmpty()){
+            player.setHealthPoints(player.getHealthPoints() + dHP);
+            player.setManaPoints(player.getManaPoints() + dDP);
+        } else {
+            List<Card> list = player.getDeck();
+            for (Card card : list)
+                if (card.getName().equals(name)) {
+                    card.setHealthPoints(card.getHealthPoints() + dHP);
+                    card.setDamagePoints(card.getDamagePoints() + dDP);
+                    break;
+                }
+            player.setDeck(list);
+        }
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         String temp = gson.toJson(player);
@@ -117,6 +122,10 @@ public class DBHelper extends SQLiteOpenHelper {
         Player player_to = new Player();
         ArrayList<String> copied = new ArrayList<>(player_from.getAchievements());
         for (int i = 0; i < copied.size(); i++) player_to.addAchievement(copied.get(i));
+        ArrayList<Card> copied_ = new ArrayList<>(player_from.getDeck());
+        player_to.setDeck(copied_);
+        player_to.setManaPoints(player_from.getManaPoints());
+        player_to.setHealthPoints(player_from.getHealthPoints());
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         String object = gson.toJson(player_to);

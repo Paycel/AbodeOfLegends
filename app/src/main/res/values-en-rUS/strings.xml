@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AdobeOfLegends</string>
-    <string name="name">Adobe Of Legends</string>
+    <string name="app_name">AbodeOfLegends</string>
+    <string name="name">Abode Of Legends</string>
     <string name="load">Loading</string>
     <string name="randomly">Random level</string>
     <string name="choose_level">Choose level</string>
@@ -55,4 +55,23 @@
     <string name="dialog_message_shop1">"It will cost you "</string>
     <string name="dialog_message_shop2">" points"</string>
     <string name="no_points">Unfortunately, you do not have enough points for this.</string>
+    <string name="your_card">"Your card "</string>
+    <string name="dead_from">" died from "</string>
+    <string name="card_answer_dead">but in response the enemy’s card died!</string>
+    <string name="killed">" won "</string>
+    <string name="deal_damage">" deal "</string>
+    <string name="damage_log">" damage "</string>
+    <string name="n_lose">" and loses"</string>
+    <string name="health_">" health "</string>
+    <string name="you">You</string>
+    <string name="gets">" get"</string>
+    <string name="gets_">" get"</string>
+    <string name="damage_from_your_card">damage from your card</string>
+    <string name="damage_from_card">damage from card</string>
+    <string name="enemy_">Enemy</string>
+    <string name="card_name_peasant">Peasant</string>
+    <string name="card_name_swordsman">Swordsman</string>
+    <string name="card_name_wizard">Wizard</string>
+    <string name="card_name_archer">Archer</string>
+    <string name="card_name_vampire">Vampire</string>
 </resources>

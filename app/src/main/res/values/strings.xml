@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">AdobeOfLegends</string>
-    <string name="name">Adobe Of Legends</string>
+    <string name="app_name">AbodeOfLegends</string>
+    <string name="name">Abode Of Legends</string>
     <string name="load">Загрузка</string>
     <string name="randomly">Случайный уровень</string>
     <string name="choose_level">Выбрать уровень</string>
@@ -15,6 +15,11 @@
     <string name="last_level">Поздравляем! Это был последний уровень!</string>
     <string name="again">Начать заново</string>
     <string name="exit">Выход</string>
+    <string name="card_name_peasant">Крестьянин</string>
+    <string name="card_name_swordsman">Мечник</string>
+    <string name="card_name_wizard">Волшебник</string>
+    <string name="card_name_archer">Лучник</string>
+    <string name="card_name_vampire">Вампир</string>
     <string name="journal_start">Это ваш журнал боя</string>
     <string name="OK" translatable="false">2713</string>
     <string name="NO" translatable="false">2716</string>
@@ -26,6 +31,16 @@
     <string name="enemy">Соперник: </string>
     <string name="no_mana">Недостаточно маны!</string>
     <string name="points">"Очков: "</string>
+    <string name="your_card">Ваша карта </string>
+    <string name="dead_from"> погибла от </string>
+    <string name="card_answer_dead">но в ответ карта противника погибла!</string>
+    <string name="killed"> победила </string>
+    <string name="deal_damage"> наносит </string>
+    <string name="enemy_">Противник</string>
+    <string name="damage_log"> урона </string>
+    <string name="n_lose"> и теряет </string>
+    <string name="you">Вы</string>
+    <string name="health_"> здоровья </string>
     <string name="sign_in">Войти</string>
     <string name="hp" translatable="false">"HP: "</string>
     <string name="mp" translatable="false">"MP: "</string>
@@ -36,6 +51,10 @@
     <string name="dialog_title_shop">Улучшение карты</string>
     <string name="dialog_message_shop1">Это будет стоить вам </string>
     <string name="dialog_message_shop2"> поинтов</string>
+    <string name="gets"> получает </string>
+    <string name="gets_"> получаете </string>
+    <string name="damage_from_your_card"> урона от вашей карты</string>
+    <string name="damage_from_card"> урона от карты</string>
     <string name="stage">"ЭТАП "</string>
     <string name="choose_card">Вы должны выбрать карту для удара!</string>
     <string name="exit_dialog_title">Выход в главное меню</string>

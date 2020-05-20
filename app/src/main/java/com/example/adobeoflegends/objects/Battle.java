@@ -2,6 +2,7 @@ package com.example.adobeoflegends.objects;
 
 import android.content.Context;
 
+import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.activity.BattleActivity;
 import com.example.adobeoflegends.activity.Menu;
 import com.example.adobeoflegends.database.DBHelper;
@@ -13,14 +14,16 @@ public class Battle{
     private Player player;
     private Enemy enemy;
     private static int numsOfCards;
+    private Context context;
 
     public Battle(Context context, String currentUser){
         DBHelper dbHelper = new DBHelper(context);
+        this.context = context;
         List<Card> cardList = new ArrayList<>();
         Player player = dbHelper.getPlayer(Menu.dataBase, currentUser);
         List<Card> great = player.getDeck();
         for (int i = 0; i < numsOfCards; i++) {
-            Card card = new Card();
+            Card card = new Card(context);
             for (Card temp : great) if (card.getName().equals(temp.getName())) {
                     card.setDamagePoints(temp.getDamagePoints());
                     card.setHealthPoints(temp.getHealthPoints());
@@ -32,7 +35,7 @@ public class Battle{
         this.player = new Player(player.getHealthPoints(), player.getManaPoints(), player.getCardList());
         cardList = new ArrayList<>();
         for (int i = 0; i < numsOfCards; i++)
-            cardList.add(new Card());
+            cardList.add(new Card(context));
         enemy = new Enemy(30, 30, cardList);
     }
 
@@ -42,21 +45,12 @@ public class Battle{
         enemy.setHealthPoints(enemy.getHealthPoints() - player.getDamagePoints());
         player.setHealthPoints(player.getHealthPoints() - enemy.getDamagePoints());
         if (enemy.getHealthPoints() <= 0 && player.getHealthPoints() <= 0){
-            BattleActivity.log.add("Ваша карта " + player.getName() + "(" + player.getDamagePoints() + ", " + p_hp + ")" +
-                    " погибла от " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp + "), но в ответ карта противника погибла!");
             return 3;
         } else if (enemy.getHealthPoints() <= 0 && player.getHealthPoints() > 0){
-            BattleActivity.log.add("Ваша карта " + player.getName() + "(" + player.getDamagePoints() + ", " + p_hp + ")" +
-                    " победила " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp +")");
             return 2;
         } else if (enemy.getHealthPoints() > 0 && player.getHealthPoints() <= 0){
-            BattleActivity.log.add("Ваша карта " + player.getName() + "(" + player.getDamagePoints() + ", " + p_hp + ")" +
-                    " погибла от " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp + ")");
             return 1;
         } else {
-            BattleActivity.log.add("Ваша карта " + player.getName() + "(" + player.getDamagePoints() + ", " + p_hp + ")" +
-                    " наносит " + player.getDamagePoints() + " урона " + enemy.getName() + " (" + enemy.getDamagePoints() + ", " + e_hp +
-                    ") и теряет " + (p_hp - player.getHealthPoints()) + " здоровья");
             return 0;
         }
     }

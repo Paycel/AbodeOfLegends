@@ -1,5 +1,6 @@
 package com.example.adobeoflegends.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -7,11 +8,14 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.adobeoflegends.R;
 import com.example.adobeoflegends.activity.BattleActivity;
+
+import java.util.Objects;
 
 public class Info_Second extends DialogFragment {
     private boolean journal;
@@ -20,12 +24,14 @@ public class Info_Second extends DialogFragment {
         this.journal = journal;
     }
 
+    @NonNull
+    @SuppressLint("SetTextI18n")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        ScrollView scrollView = new ScrollView(getActivity().getApplicationContext());
+        ScrollView scrollView = new ScrollView(Objects.requireNonNull(getActivity()).getApplicationContext());
         TextView textView = new TextView(scrollView.getContext());
-        textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.pixel));
+        textView.setTypeface(ResourcesCompat.getFont(Objects.requireNonNull(getContext()), R.font.pixel));
         if (journal)
         for (int i = 0; i < BattleActivity.log.size(); i++){
             textView.setText(textView.getText().toString() + BattleActivity.log.get(i) + "\n");
