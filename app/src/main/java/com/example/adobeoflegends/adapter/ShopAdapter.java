@@ -2,7 +2,6 @@ package com.example.adobeoflegends.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +60,9 @@ public class ShopAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) view = inflater.inflate(R.layout.item_shop, parent, false);
         int id;
+        // first card - is Player
         if (position == 0){
-            id = R.drawable.wizard;
+            id = R.drawable.you;
             ((TextView) view.findViewById(R.id.tv_prevHP)).setText("" + player.getHealthPoints());
             ((TextView) view.findViewById(R.id.tv_addHP)).setText("+ 1");
             ((TextView) view.findViewById(R.id.tv_prevDP)).setText("" + player.getManaPoints());
@@ -79,7 +79,7 @@ public class ShopAdapter extends BaseAdapter {
                     shopDialog.show(fragmentManager, "Shop_Dialog");
                 }
             });
-        } else {
+        } else { // Player cards
             position -= 1;
             id = cards.get(position).getIds()[position];
             final int dH = new Card(context).getDhp(cards.get(position).getName(), cards.get(position).getHealthPoints()),
@@ -90,11 +90,9 @@ public class ShopAdapter extends BaseAdapter {
             ((TextView) view.findViewById(R.id.tv_addDP)).setText("+" + dP);
             Button btn = (Button) view.findViewById(R.id.btn_up);
             btn.setText(btn_name);
-            Log.d("temp", btn_name);
             final DBHelper dbHelper = new DBHelper(context);
             final int cost = new Card(context).getCardsCost(cards.get(position).getName(), cards.get(position).getHealthPoints(), cards.get(position).getDamagePoints());
             final String name = cards.get(position).getName();
-
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -103,10 +101,7 @@ public class ShopAdapter extends BaseAdapter {
                 }
             });
         }
-
         ((ImageView) view.findViewById(R.id.card_image)).setImageResource(id);
-
-
         return view;
     }
 }

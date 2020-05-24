@@ -14,13 +14,15 @@ import com.example.adobeoflegends.adapter.AchievementsAdapter;
 import com.example.adobeoflegends.database.DBHelper;
 import com.example.adobeoflegends.objects.Player;
 
+import java.util.Objects;
+
 public class Achievements extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         ListView rvAchievements = (ListView) findViewById(R.id.achievements);
         Button buttonBack = (Button) findViewById(R.id.btn_backToMain);
         buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +35,7 @@ public class Achievements extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(getApplicationContext());
         dbHelper.showInfo(Menu.dataBase);
         Player player = dbHelper.getPlayer(Menu.dataBase, getIntent().getStringExtra("currentUser"));
-        player.sort();
+        player.sort(); // sorting achievements by value
         AchievementsAdapter adapter = new AchievementsAdapter(this, player);
         rvAchievements.setAdapter(adapter);
     }

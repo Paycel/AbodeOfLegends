@@ -29,7 +29,7 @@ public class ExitDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
         builder.setMessage(message);
-        // правая кнопка
+        // right button
         builder.setPositiveButton(btnYes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 Intent i = new Intent(getActivity(), Menu.class);
@@ -41,7 +41,7 @@ public class ExitDialog extends DialogFragment {
                 startActivity(i);
             }
         });
-        // левая кнопка
+        // left button
         builder.setNegativeButton(btnNo, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dismiss();

@@ -19,12 +19,14 @@ import androidx.fragment.app.DialogFragment;
 import com.example.adobeoflegends.objects.Card;
 import com.example.adobeoflegends.R;
 
+import java.util.Objects;
+
 import static com.example.adobeoflegends.activity.BattleActivity.findCard;
 
 
 public class ShowCardDialog extends DialogFragment {
 
-    ConstraintLayout card;
+    private ConstraintLayout card;
 
     public ShowCardDialog(ConstraintLayout card){
         this.card = card;
@@ -33,13 +35,14 @@ public class ShowCardDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        ConstraintLayout copy = new ConstraintLayout(getActivity().getApplicationContext());
+        ConstraintLayout copy = new ConstraintLayout(Objects.requireNonNull(getActivity()).getApplicationContext());
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         int width = (int) ((float)display.getWidth() * 0.8);
         int height = (int) ((float)display.getHeight() * 0.8);
         int imageWidth = (int) ((float) width * 0.15);
         int imageHeight = (int) ((float) height * 0.15);
         Card myCard = findCard(card.getId());
+        assert myCard != null;
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), myCard.getPictureID());
         BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
         drawable.setAntiAlias(false);

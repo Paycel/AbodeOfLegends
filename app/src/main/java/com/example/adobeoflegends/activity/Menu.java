@@ -63,7 +63,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
         if (dbHelper.getPoints(dataBase, locale) == -1) dbHelper.addUser(dataBase, locale, 0, getApplicationContext());
         dbHelper.setPoints(dataBase, currentUser, dbHelper.getPoints(dataBase, currentUser) + points);
         showPoints(currentUser);
-        dbHelper.showInfo(dataBase);
+        dbHelper.showInfo(dataBase); // for debug
         buttonRandomGame = (Button) findViewById(R.id.btn_RandomGame);
         buttonLoad = (Button) findViewById(R.id.btn_achieve);
         buttonShop = (Button) findViewById(R.id.btn_Shop);
@@ -113,6 +113,7 @@ public class Menu extends AppCompatActivity implements GoogleApiClient.OnConnect
                 }
             }
         };
+        // google sign in
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();

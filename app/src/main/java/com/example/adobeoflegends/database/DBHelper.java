@@ -145,6 +145,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return gson.fromJson(object, Player.class);
     }
 
+    // debug method
     public void showInfo(SQLiteDatabase db){
         Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
         if (c.moveToFirst()) {

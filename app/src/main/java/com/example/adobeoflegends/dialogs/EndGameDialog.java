@@ -19,9 +19,9 @@ import static com.example.adobeoflegends.activity.BattleActivity.difficulty;
 
 public class EndGameDialog extends DialogFragment {
     /*
-    mode - выбор режима:
-    1 - окончание игры - поражение
-    2 - окончание игры - победа
+    mode:
+    1 - lose
+    2 - win
      */
 
     int mode;
@@ -43,7 +43,7 @@ public class EndGameDialog extends DialogFragment {
             case 1:
                 title = getResources().getText(R.string.end_title_lose).toString();
                 message = getResources().getText(R.string.end_message_lose).toString();
-                // правая кнопка
+                // right button
                 builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), Menu.class);
@@ -54,7 +54,7 @@ public class EndGameDialog extends DialogFragment {
                         startActivity(i);
                     }
                 });
-                // левая кнопка
+                // left button
                 builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), BattleActivity.class);
@@ -71,7 +71,7 @@ public class EndGameDialog extends DialogFragment {
                 if (BattleActivity.difficulty == 12)
                     message = getResources().getText(R.string.last_level).toString();
                 else message = getResources().getText(R.string.end_message_win).toString();
-                // правая кнопка
+                // right button
                 builder.setPositiveButton(btnExit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), Menu.class);
@@ -83,7 +83,7 @@ public class EndGameDialog extends DialogFragment {
                         startActivity(i);
                     }
                 });
-                // левая кнопка
+                // left button
                 builder.setNegativeButton(btnAgain, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(getActivity(), BattleActivity.class);

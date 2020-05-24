@@ -15,8 +15,6 @@ import java.util.Objects;
 
 public class Main extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 5 * 1000;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +26,7 @@ public class Main extends AppCompatActivity {
         Animation anim_name = AnimationUtils.loadAnimation(this, R.anim.splash_logo_name);
         logo_pic.startAnimation(anim_pic);
         logo_name.startAnimation(anim_name);
+        int SPLASH_DISPLAY_LENGTH = 5 * 1000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

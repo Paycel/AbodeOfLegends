@@ -14,12 +14,14 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.adobeoflegends.R;
 
+import java.util.Objects;
+
 public class Choose_Level extends AppCompatActivity {
     ConstraintLayout main;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.choose_level);
         main = (ConstraintLayout) findViewById(R.id.choose_constr);
         TextView tv = (TextView) findViewById(R.id.tv_choose);
@@ -57,12 +59,12 @@ public class Choose_Level extends AppCompatActivity {
             main.addView(btn);
             set.clone(main);
             if (i > 0) {
-                if ((i - 1) % 3 == 0) { // центральные
+                if ((i - 1) % 3 == 0) { // central
                     set.connect(i + 1, ConstraintSet.LEFT, main.getId(), ConstraintSet.LEFT, dp / 10);
                     set.connect(i + 1, ConstraintSet.RIGHT, main.getId(), ConstraintSet.RIGHT, dp / 10);
                     set.connect(i + 1, ConstraintSet.TOP, i, ConstraintSet.TOP, 0);
                 }
-                else if (i % 3 == 0){ // левые (2 нижние)
+                else if (i % 3 == 0){ // left (2 lower)
                     set.connect(i + 1, ConstraintSet.LEFT, main.getId(), ConstraintSet.LEFT, dp / 10);
                     set.connect(i + 1, ConstraintSet.TOP, i - 2, ConstraintSet.BOTTOM, dp / 10);
                 } else if ((i+1) % 3 == 0) { // правые все
@@ -72,7 +74,7 @@ public class Choose_Level extends AppCompatActivity {
                     else
                         set.connect(i + 1, ConstraintSet.TOP, tv.getId(), ConstraintSet.BOTTOM, dp / 10);
                 }
-            } else { // левая верхняя
+            } else { // left upper
                 set.connect(i + 1, ConstraintSet.LEFT, main.getId(), ConstraintSet.LEFT, dp / 10);
                 set.connect(i + 1, ConstraintSet.TOP, tv.getId(), ConstraintSet.BOTTOM, dp / 10);
             }
