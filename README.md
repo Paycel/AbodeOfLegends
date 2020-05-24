@@ -4,7 +4,7 @@ This project is a student project. It does not carry the goals of commerce or re
 
 # Technical features
 
-It contains localization (Rus / Eng). Since this application is not officially posted on Google Play, the login to your Google account saves your progress only on your device. However, you can connect any number of your accounts and switch between them.
+It contains localization (Rus / Eng). Since this application is not officially posted on Google Play, the login to your Google account saves your progress only on your device. However, you can connect any number of your accounts and switch between them. This content requires Android 7.0 and higher.
 
 # About the game
 
