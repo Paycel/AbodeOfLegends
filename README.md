@@ -16,4 +16,4 @@ First of all, for an interesting pastime. The game is designed for people of all
 
 # Download
 
-Click the link to install APK - [CLICK ME](https://github.com/Paycel/AbodeOfLegends/blob/master/app-debug.apk)
+Click the link to install APK - [CLICK ME](https://github.com/Paycel/AbodeOfLegends/raw/master/app-debug.apk)
